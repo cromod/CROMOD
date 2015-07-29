@@ -51,6 +51,11 @@ Segment& Polygon::operator[](const unsigned int& i)
     return listSeg_[i];
 }
 
+Polygon& Polygon::operator=(const Polygon &polygon)
+{
+    listSeg_ = polygon.listSeg_ ;
+}
+
 unsigned int Polygon::size()
 {
     return listSeg_.size();
@@ -286,10 +291,12 @@ bool Polygon::isInside(const Point& point_in)
     Point point_out = this->getOutside();
     Segment segment(point_in,point_out);
     if (this->isOnEdge(point_in)) {
-        cout << "Hello" << endl;return true;
+        //cout << "Hello" << endl;
+        return true;
     }
     else if ( (this->getNbIntersect(segment)) % 2 == 0 ) {
-        cout << "Hello =" << this->getNbIntersect(segment) << endl;return false;
+        //cout << "Hello =" << this->getNbIntersect(segment) << endl;
+        return false;
     }
     else return true;
 }

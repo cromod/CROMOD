@@ -34,6 +34,8 @@ namespace Cromod {
                 
                 /* Operateur [] */
                 Segment& operator[](const unsigned int& i);
+                /* Operateur affectation */
+                Polygon& operator=(const Polygon &polygon);
                 
                 /* Methode pour recuperer le nbre de cotes */
                 unsigned int size();
