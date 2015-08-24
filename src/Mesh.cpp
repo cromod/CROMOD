@@ -10,6 +10,7 @@
 #include "Exception.hpp"
 #include "Constants.hpp"
 #include <cmath>
+#include <iostream>
 #include <string>
 #include <map>
 
@@ -132,7 +133,7 @@ void Mesh::setDim(std::vector<int> dim)
 void Mesh::setInitGrid()
 {
     Polygon polygon(this->getPolygon());
-    this->deleteAll();
+    if (this->size()>0) this->deleteAll();
     double step(this->getStep());
     // Recherche des coordonnees extremes
     map<string,double> coord(polygon.getBottom());
@@ -165,22 +166,20 @@ void Mesh::detectNode()
 {
     Polygon polygon(this->getPolygon());
     int size(this->size());
+    int size_p(polygon.size());
     double step(this->getStep());
     
     for(int i=0; i<size; i++) {
-        Node node((*this)[i]);
-        Point point(node.getPosition());
-        
+        Point point((*this)[i].getPosition());
+
         if (polygon.isInside(point)) {
-            node.setInside(true);
-            double min_dist(step);
+            (*this)[i].setInside(true);
             
-            for(int j=0; j<polygon.size(); j++) {
-                min_dist = min(polygon[j].getMinDist(node.getPosition()),min_dist);
-                
-                if (min_dist < step) {
-                    node.setNearEdge(true);
-                    (*this)[i]=node;
+            for(int j=0; j<size_p; j++) { 
+
+                if (polygon[j].getMinDist(point) < step) {
+                    (*this)[i].setNearEdge(true);
+                    break;
                 }
             }
         }

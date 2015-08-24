@@ -2,7 +2,7 @@
 
 include(CTest)
 
-file(GLOB TEST_FILES ${PROJECT_SOURCE_DIR}/unit_tests/*.cpp)
+file(GLOB TEST_FILES ${PROJECT_SOURCE_DIR}/test/*.cpp)
 
 foreach (FILE ${TEST_FILES})
   # Define the name of unit test

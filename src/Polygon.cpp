@@ -10,6 +10,7 @@
 #include "Polygon.hpp"
 #include "Exception.hpp"
 #include <list>
+#include <cmath>
 #include <algorithm>
 #include <iostream>
 
@@ -166,20 +167,8 @@ vector<Point> Polygon::getPoints()
 }
 
 Point Polygon::getOutside()
-{
-    unsigned int size = this->size();
-    if ( size < 2 || !(this->isClosed()) ) {
-        throw(Exception("Impossible to get Point object with Polygon::getOutside"
-                                ,__FILE__,__LINE__)) ;
-    }
-    
-    double val_max(0.);
-    vector<Point> list = this->getPoints();
-    
-    for(vector<Point>::iterator pt=list.begin(); pt!=list.end(); ++pt)
-        val_max = max( max((*pt)[0],(*pt)[1]) , val_max );
-    
-    double pt[] = {val_max + 1.,0.};
+{  
+    double pt[] = {INFINITY,0.};
     Point point(pt,2);
     return point;
 }
@@ -291,12 +280,12 @@ bool Polygon::isInside(const Point& point_in)
     Point point_out = this->getOutside();
     Segment segment(point_in,point_out);
     if (this->isOnEdge(point_in)) {
-        //cout << "Hello" << endl;
+        //cout << "On edge" << endl;
         return true;
     }
-    else if ( (this->getNbIntersect(segment)) % 2 == 0 ) {
-        //cout << "Hello =" << this->getNbIntersect(segment) << endl;
-        return false;
+    else if ( (this->getNbIntersect(segment)) % 2 != 0 ) {
+        //cout << "Nb of intersection = " << this->getNbIntersect(segment) << endl;
+        return true;
     }
-    else return true;
+    else return false;
 }

@@ -23,4 +23,4 @@ add_executable (CROMOD ${MAIN_FILE})
 target_link_libraries (CROMOD Internal)
 
 # Add the unit tests
-add_subdirectory (unit_tests)
+add_subdirectory (test)

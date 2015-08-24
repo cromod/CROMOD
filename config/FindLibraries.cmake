@@ -16,7 +16,7 @@ if (Boost_FOUND)
 endif ()
 
 # SFML library
-find_package(SFML 2 COMPONENTS window graphics REQUIRED)
+find_package(SFML 2 COMPONENTS system window graphics REQUIRED)
 
 if(SFML_FOUND)
 
