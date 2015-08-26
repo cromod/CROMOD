@@ -154,12 +154,25 @@ BOOST_AUTO_TEST_CASE( MethodTests )
     
     cout << "- Mesh::setDetect test" << endl;
     try {
-         mesh.setDetect(false);
+        mesh.setDetect(false);
     }
     catch(...) {
         BOOST_FAIL("Mesh::setDetect failure");
     }
     BOOST_REQUIRE_MESSAGE(!mesh.isDetect(),"Mesh::setInit failure");
+    
+    cout << "- Mesh::getDim test" << endl;
+    mesh.setInit(true);
+    BOOST_REQUIRE_MESSAGE(mesh.getDim()[0]==43,"Mesh::getDim failure");
+    BOOST_REQUIRE_MESSAGE(mesh.getDim()[1]==43,"Mesh::getDim failure");
+    
+    cout << "- Mesh::setDim test" << endl;
+    vector<int> dim;
+    dim.push_back(43);
+    dim.push_back(43);
+    mesh.setDim(dim);
+    BOOST_REQUIRE_MESSAGE(mesh.getDim()[0]==43,"Mesh::getDim failure");
+    BOOST_REQUIRE_MESSAGE(mesh.getDim()[1]==43,"Mesh::getDim failure");
     
     cout << "- Graphic test of Mesh" << endl;
     sf::RenderWindow window(sf::VideoMode(500, 500), "Test of Mesh class");

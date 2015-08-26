@@ -127,7 +127,7 @@ void Mesh::setDim(std::vector<int> dim)
 {
     if (dim[0]*dim[1]==this->size()) dim_ = dim ;
     else Exception::logWarning("Argument does not suit in Mesh::setDim",
-                                __FILE__,__LINE__);
+                                __FILE__,__LINE__) ;
 }
 
 void Mesh::setInitGrid()
