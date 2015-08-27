@@ -14,7 +14,9 @@ using namespace std;
 
 Node::Node() : point_(0.,2), 
                near_(false),
-               inside_(false)
+               inside_(false),
+               value_(),
+               status_(false,2)
 {
 }
 
@@ -25,9 +27,11 @@ Node::Node(const Node& node)
     point_ = node.point_;
     near_ = node.near_;
     inside_ = node.inside_;
+    value_ = node.value_;
+    status_ = node.status_;
 }
 
-Node::Node(const Point& point, bool near, bool inside) 
+Node::Node(const Point& point, bool near, bool inside) : value_(),status_(false,2)
 {
     if (point.size()!=2) 
         throw(Exception("Wrong vector<double> size in Node::Node",__FILE__,__LINE__)) ;
@@ -88,4 +92,24 @@ void Node::setInside(bool inside)
 bool Node::isInside() const
 {
     return inside_;
+}
+
+void Node::setValue(const Vector &value)
+{
+    value_ = value;
+}
+
+Vector Node::getValue() const
+{
+    return value_;
+}
+
+void Node::setStatus(const vector<bool> &status)
+{
+    status_ = status;
+}
+
+vector<bool> Node::getStatus() const
+{
+    return status_;
 }
