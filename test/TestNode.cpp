@@ -98,6 +98,32 @@ BOOST_AUTO_TEST_CASE( BasicTests )
 
     cout << "- Node::isInside test" << endl;
     BOOST_REQUIRE_MESSAGE(node2.isInside(),"Node::isInside failure");
+        
+    cout << "- Node::setValue test" << endl;
+    Vector value(2.,2);
+    try {
+        node1.setValue(value);
+    }
+    catch(...) {
+        BOOST_FAIL("Node::setValue failure");
+    }
+    
+    cout << "- Node::getValue test" << endl;
+    BOOST_REQUIRE_MESSAGE(node1.getValue()==value,"Node::getValue failure");
+    
+    cout << "- Node::setStatus test" << endl;
+    vector<bool> status;
+    status.push_back(true);
+    status.push_back(false);
+    try {
+        node1.setStatus(status);
+    }
+    catch(...) {
+        BOOST_FAIL("Node::setStatus failure");
+    }
+    
+    cout << "- Node::getStatus test" << endl;
+    BOOST_REQUIRE_MESSAGE(node1.getStatus()==status,"Node::getStatus failure");
     
     cout << "<<< End of TestNode >>>" << endl;
 }

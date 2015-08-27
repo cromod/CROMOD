@@ -123,7 +123,8 @@ BOOST_AUTO_TEST_CASE( MethodTests )
     catch(...) {
         BOOST_FAIL("Mesh::setInitGrid failure");
     }
-    cout << "  Nb de noeuds = " << mesh.size() << endl;
+    cout << "  Nb of node = " << mesh.size() << endl;
+    BOOST_REQUIRE_MESSAGE(mesh.size()==1849,"Mesh::setInitGrid failure");
     
     cout << "- Mesh::isInit test" << endl;
     BOOST_REQUIRE_MESSAGE(mesh.isInit(),"Mesh::isInit failure");
@@ -138,16 +139,15 @@ BOOST_AUTO_TEST_CASE( MethodTests )
     BOOST_REQUIRE_MESSAGE(!mesh.isInit(),"Mesh::setInit failure");
     
     cout << "- Mesh::detectNode test" << endl;
-    sf::Clock clock;
+    
     try {
         mesh.detectNode();
     }
     catch(...) {
         BOOST_FAIL("Mesh::detectNode failure");
     }
-    sf::Time time = clock.getElapsedTime();
-    cout << "  Time = " << time.asSeconds() << " s"<< endl;
-    cout << "  Nb de noeuds = " << mesh.size() << endl;
+    cout << "  Nb of node = " << mesh.size() << endl;
+    BOOST_REQUIRE_MESSAGE(mesh.size()==1849,"Mesh::detectNode failure");
     
     cout << "- Mesh::isDetect test" << endl;
     BOOST_REQUIRE_MESSAGE(mesh.isDetect(),"Mesh::isDetect failure");
@@ -177,7 +177,9 @@ BOOST_AUTO_TEST_CASE( MethodTests )
     cout << "- Graphic test of Mesh" << endl;
     sf::RenderWindow window(sf::VideoMode(500, 500), "Test of Mesh class");
     // on fait tourner le programme jusqu'à ce que la fenêtre soit fermée
-    while (window.isOpen()) {
+    sf::Clock clock;
+    sf::Time time;
+    while (window.isOpen() && time.asSeconds()<2.0) {
         // on inspecte tous les evenements de la fenetre qui ont ete emis depuis la precedente itération
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -191,13 +193,13 @@ BOOST_AUTO_TEST_CASE( MethodTests )
         for(int i=0; i<mesh.size(); i++) {
             Point point(mesh[i].getPosition());
             sf::CircleShape c_in(4);
-	    c_in.setOrigin(4.,4.);
+            c_in.setOrigin(4.,4.);
             c_in.setFillColor(sf::Color::Green);
             c_in.setPosition(point[0]+250.,point[1]+250.);
             window.draw(c_in);
             if (mesh[i].isNearEdge()) {
                 sf::CircleShape c_near(2);
-		c_near.setOrigin(2.,2.);
+                c_near.setOrigin(2.,2.);
                 c_near.setFillColor(sf::Color::Red);
                 c_near.setPosition(point[0]+250.,point[1]+250.);
                 window.draw(c_near);
@@ -205,7 +207,7 @@ BOOST_AUTO_TEST_CASE( MethodTests )
         }
         // fin de la frame courante, affichage de tout ce qu'on a dessine
         window.display();
+        time = clock.getElapsedTime();
     }
-
     cout << "<<< End of TestMesh >>>" << endl;
 }
