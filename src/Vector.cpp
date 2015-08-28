@@ -1,8 +1,8 @@
-/* 
- * File:   Vector.cpp
- * Author: florent
- *
- * Created on 26 juillet 2015, 19:59
+/** 
+ * @file Vector.cpp
+ * @brief Source file of Vector class
+ * @author cromod
+ * @date july 2015
  */
 
 #include "Vector.hpp"
