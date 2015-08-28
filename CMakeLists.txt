@@ -5,6 +5,7 @@ project (CROMOD)
 # Launch modules
 set (CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/config" ${CMAKE_MODULE_PATH})
 include (FindLibraries)
+include (MakeDoc)
 
 # List of include files
 include_directories (${PROJECT_SOURCE_DIR}/inc)
