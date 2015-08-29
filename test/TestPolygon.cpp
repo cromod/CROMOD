@@ -1,8 +1,8 @@
-/* 
- * File:   TestPolygon.cpp
- * Author: florent
- *
- * Created on 26 juin 2015, 22:37:26
+/** 
+ * @file TestPolygon.cpp
+ * @brief Unit test of Polygon class
+ * @author cromod
+ * @date june 2015
  */
 
 #define BOOST_TEST_DYN_LINK

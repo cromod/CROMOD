@@ -1,10 +1,8 @@
-/* 
- * File:   TestException.cpp
- * Author: florent
- * 
- * Unit test on class Exception
- *
- * Created on 20 juin 2015, 22:20
+/** 
+ * @file TestException.cpp
+ * @brief Unit test of Exception class
+ * @author cromod
+ * @date june 2015
  */
 
 #define BOOST_TEST_DYN_LINK

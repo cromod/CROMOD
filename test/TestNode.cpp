@@ -1,8 +1,8 @@
-/* 
- * File:   TestNode.cpp
- * Author: florent
- *
- * Created on 7 juil. 2015, 21:54:27
+/** 
+ * @file TestNode.cpp
+ * @brief Unit test of Node class
+ * @author cromod
+ * @date july 2015
  */
 
 #define BOOST_TEST_DYN_LINK

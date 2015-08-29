@@ -1,10 +1,8 @@
-/* 
- * File:   TestSegment.cpp
- * Author: florent
- *
- * Unit test on class Segment
- * 
- * Created on 21 juin 2015, 00:13:47
+/** 
+ * @file TestSegment.cpp
+ * @brief Unit test of Segment class
+ * @author cromod
+ * @date june 2015
  */
 
 #define BOOST_TEST_DYN_LINK

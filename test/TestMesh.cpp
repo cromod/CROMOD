@@ -1,3 +1,10 @@
+/** 
+ * @file TestMesh.cpp
+ * @brief Unit test of Mesh class
+ * @author cromod
+ * @date july 2015
+ */
+
 #define BOOST_TEST_DYN_LINK
 #define BOOST_TEST_MODULE TestMesh
 #include <boost/test/unit_test.hpp>
