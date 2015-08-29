@@ -13,7 +13,7 @@
 namespace Cromod {
     namespace GeomAPI {
         /** @class Vector Vector.hpp
-         *  @brief Define a vector
+         *  @brief Class to define a vector
          */
         class Vector: public std::valarray<double>
         {
