@@ -1,8 +1,8 @@
-/* 
- * File:   Segment.hpp
- * Author: florent
- *
- * Created on 18 juin 2015, 23:35
+/** 
+ * @file Segment.hpp
+ * @brief Header file of Segment class
+ * @author cromod
+ * @date june 2015
  */
 
 #ifndef SEGMENT_HPP
@@ -13,98 +13,144 @@
 
 namespace Cromod {
     namespace GeomAPI {
-        /* 
-         * Classe Segment
-         * Definition d'un segment a partir de 2 points
+        /** @class Segment Segment.hpp
+         *  @brief Class to define a segment
          */
         class Segment {
             
             public:
                 
-                /* Constructeur par defaut */
+                /** @brief Default constructor */
                 Segment();
-                /* Constructeur par copie */
+                /** @brief Copy constructor */
                 Segment(const Segment& seg);
-                /* Constructeur */
+                /** @brief Constructor
+                 *  @param point1 first point
+                 *  @param point2 second point
+                 *  @param exit boolean
+                 */
                 Segment(const Point &point1,
                         const Point &point2, const bool &exit=false);
-                /* Destructeur */
+                /** @brief Destructor */
                 virtual ~Segment();
                 
-                /* Operateur egal */
+                /** @brief Equality operator
+                 *  @param seg Segment object
+                 *  @return true if Segment objects are equal
+                 */
                 bool operator==(const Segment &seg) const;
-                /* Operateur difference */
+                /** @brief Inequality operator
+                 *  @param seg Segment object
+                 *  @return true if Segment objects are not equal
+                 */
                 bool operator!=(const Segment &seg) const;
-                /* Operateur affectation */
+                /** @brief Assignment operator
+                 *  @param seg Segment object
+                 *  @return Segment object
+                 */
                 Segment& operator=(const Segment &seg);
                 
-                /* Methode pour definir le 1er point */
+                /** @brief Method to define a point as an exit
+                 *  @param exit true if it is an exit point
+                 */
                 void setExit(bool exit);
-                /* Methode pour recuperer le 1er point */
+                /** @brief Method to know a point is an exit
+                 *  @return true if it is an exit point
+                 */
                 bool isExit() const;
-                /* Methode pour definir le 1er point */
+                /** @brief Method to define the first point
+                 *  @param point1 first point
+                 */
                 void setOne(Point point1);
-                /* Methode pour recuperer le 1er point */
+                /** @brief Method to get the first point
+                 *  @return first point
+                 */
                 Point getOne() const;
-                /* Methode pour definir le 2e point */
+                /** @brief Method to define the second point
+                 *  @param point2 second point
+                 */
                 void setTwo(Point point2);
-                /* Methode pour recuperer le 2e point */
+                /** @brief Method to get the second point
+                 *  @return second point
+                 */
                 Point getTwo() const;
-                /* Methode pour definir les 2 points */
+                /** @brief Method to define endpoints
+                 *  @param point1 first point
+                 *  @param point2 second point
+                 */
                 void setPoints(Point point1,Point point2);
-                /* Methode pour recuperer les 2 points */
+                /** @brief Method to get endpoints
+                 *  @return list of endpoints
+                 */
                 std::vector<Point> getPoints() const;
-                /* Methode pour recuperer le vecteur du segment */
+                /** @brief Method to get vector
+                 *  @return vector between first and second points
+                 */
                 Vector getVector() const;
                 
-                /* Methode pour recuperer la longueur du segment */
+                /** @brief Method to get the length of segment
+                 *  @return length of segment
+                 */
                 double getLength() const;
-                /* Methode pour verifier si les 2 points forment un segment */
+                /** @brief Method to know if it is a segment
+                 *  @return true if it is a segment
+                 */
                 bool isSegment() const;
-                /* Methode pour la distance minimale d'un point a un segment */
+                /** @brief Method to get the minimum distance between point and segment
+                 *  @param point Point object
+                 *  @return minimum distance between point and segment
+                 */
                 double getMinDist(const Point &point);
                 
-                /* Fonction Orientation pour determiner l'orientation
-                 * de l'angle forme par 3 points
-                 * resultat < 0 -> sens inverse des aiguilles d'une montre
-                 * resultat = 0 -> points colineaires
-                 * resultat > 0 -> sens des aiguilles d'une montre
-                 * http://en.wikipedia.org/wiki/Curve_orientation
+                /** @brief Function to determine the orientation of three points
+                 *  @details http://en.wikipedia.org/wiki/Curve_orientation
+                 *  @param pointA first point
+                 *  @param pointB second point
+                 *  @param pointC third point
+                 *  @return result < 0 -> counterclockwise direction\n
+                 *          result = 0 -> points collinear\n
+                 *          result > 0 -> clockwise direction
                  */
                 static double orientation(const Point &pointA, 
                                           const Point &pointB, 
                                           const Point &pointC);
 
-                /* 
-                 * Methode pour verifier l'intersection entre 2 segments
-                 * http://algs4.cs.princeton.edu/91primitives/ 
+                /** @brief Method to check intersection
+                 *  @details http://algs4.cs.princeton.edu/91primitives/
+                 *  @param seg Segment object
+                 *  @return true if segments intersect
                  */
                 bool checkIntersect(const Segment &seg) const;
                 
-                /* 
-                 * Methode pour verifier le parallelisme entre 2 segments
-                 * Calcul du produit vectoriel
+                /** @brief Method to check parallelism
+                 *  @details -> compute cross product
+                 *  @param seg Segment object
+                 *  @return true if segments are parallel
                  */
                 bool checkParallel(const Segment &seg) const;
                 
-                /* 
-                 * Methode pour verifier l'appartenance d'un point a un segment
-                 * Utilisation du theoreme de Thales
+                /** @brief Method to check point inclusion
+                 *  @param pointB point
+                 *  @return true if point is included
+                 *  @details Thales theorem
                  */
                 bool checkInclude(const Point &pointB) const;
-                
-                /* 
-                 * Methode pour calculer les coordonnees du pied de la 
-                 * perpendiculaire au segment passant par un point quelconque
-                 * Utilisation du produit scalaire
+
+                /** @brief Method to define a projected point
+                 *  @details -> compute scalar product
+                 *  @param pointC point
+                 *  @return projected point
                  */
                 Point findPerPoint(const Point &pointC) const;
                 
             private:
                 
-                Point point1_; // Point 1
-                Point point2_; // Point 2
-                bool exit_; // Test pour savoir si le segment est une sortie
+                /** @brief First point */  
+                Point point1_; 
+                /** @brief Second point */  
+                Point point2_;
+                /** @brief Boolean to check if segment is an exit */  
+                bool exit_;
                 
         };
     }

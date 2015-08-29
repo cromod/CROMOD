@@ -1,8 +1,8 @@
-/* 
- * File:   Segment.cpp
- * Author: florent
- * 
- * Created on 18 juin 2015, 23:35
+/** 
+ * @file Segment.cpp
+ * @brief Source file of Segment class
+ * @author cromod
+ * @date june 2015
  */
 
 #include "Constants.hpp"
