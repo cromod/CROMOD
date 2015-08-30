@@ -31,11 +31,11 @@ namespace Cromod {
                 virtual ~Node();
                 
                 /* Operateur egal */
-                bool operator==(const Node &node) const;
+                virtual bool operator==(const Node &node) const;
                 /* Operateur difference */
-                bool operator!=(const Node &node) const;
+                virtual bool operator!=(const Node &node) const;
                 /* Operateur affectation */
-                Node& operator=(const Node &node);
+                virtual Node& operator=(const Node &node);
                 
                 /* Methode pour definir la position */
                 void setPosition(const Point &point);
@@ -49,22 +49,12 @@ namespace Cromod {
                 void setInside(bool inside);
                 /* Methode pour savoir si le noeud est a l'interieur du polygone */
                 bool isInside() const;
-		/* Methode pour definir la valeur associee au noeud */
-                void setValue(const Vector &value);
-                /* Methode pour recuperer la valeur associee au noeud */
-                Vector getValue() const;
-		/* Methode pour definir le statut de la valeur */
-                void setStatus(const std::vector<bool> &status);
-                /* Methode pour recuperer le statut de la valeur */
-                std::vector<bool> getStatus() const;
                 
-            private:
+            protected:
                 
                 Point point_; // Position
                 bool near_; // Noeud pres du bord du polygone
                 bool inside_; // Noeud a l'interieur du polygone
-                Vector value_; // Valeur (scalaire ou vecteur) associee au noeud
-                std::vector<bool> status_; // Statut de la valeur (frozen ou narrow)
         };
     }
 }
