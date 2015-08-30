@@ -10,8 +10,6 @@
 
 #include "Node.hpp"
 
-using namespace Cromod::GeomAPI;
-
 namespace Cromod {
     namespace FieldAPI {
         /** @class FNode FNode.hpp
@@ -52,11 +50,11 @@ namespace Cromod {
                 /** @brief Method to define value
                  *  @param value value of field node
                  */
-                void setValue(const Vector &value);
+                void setValue(const Cromod::GeomAPI::Vector &value);
                 /** @brief Method to get value
                  *  @return value of field node
                  */
-                Vector getValue() const;
+                Cromod::GeomAPI::Vector getValue() const;
                 /** @brief Method to define status
                  *  @param status status of field node (frozen,narrow)
                  */
@@ -69,7 +67,7 @@ namespace Cromod {
             private:
                 
                 /** @brief Value of field node (scalar or vector) */                 
-                Vector value_;
+                Cromod::GeomAPI::Vector value_;
                 /** @brief Status of field node (frozen,narrow) */  
                 std::vector<bool> status_;
         };
