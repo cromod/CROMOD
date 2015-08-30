@@ -1,8 +1,8 @@
-/* 
- * File:   Node.cpp
- * Author: florent
- * 
- * Created on 6 juillet 2015, 21:21
+/** 
+ * @file Node.cpp
+ * @brief Source file of Node class
+ * @author cromod
+ * @date july 2015
  */
 
 #include "Node.hpp"

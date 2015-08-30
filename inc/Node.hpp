@@ -1,8 +1,8 @@
-/* 
- * File:   Node.hpp
- * Author: florent
- *
- * Created on 6 juillet 2015, 21:21
+/** 
+ * @file Node.hpp
+ * @brief Header file of Node class
+ * @author cromod
+ * @date july 2015
  */
 
 #ifndef NODE_HPP
@@ -13,48 +13,75 @@
 
 namespace Cromod {
     namespace GeomAPI {
-        /* 
-         * Classe Node
-         * Definition d'un noeud du maillage
+        /** @class Node Node.hpp
+         *  @brief Class to define a node
          */
         class Node {
             
             public:
                 
-                /* Constructeur par defaut */
+                /** @brief Default constructor */
                 Node();
-                /* Constructeur par copie */
+                /** @brief Copy constructor */
                 Node(const Node& node);
-                /* Constructeur */
+                /** @brief Constructor
+                 *  @param mesh Mesh object
+                 *  @param near true if node is near a polygon edge
+                 *  @param inside true if node is inside polygon
+                 */
                 Node(const Point &point, bool near=false, bool inside=false);
-                /* Destructeur */
+                /** @brief Destructor */
                 virtual ~Node();
                 
-                /* Operateur egal */
+                /** @brief Equality operator
+                 *  @param node Node object
+                 *  @return true if Node objects are equal
+                 */
                 virtual bool operator==(const Node &node) const;
-                /* Operateur difference */
+                /** @brief Inequality operator
+                 *  @param node Node object
+                 *  @return true if Node objects are not equal
+                 */
                 virtual bool operator!=(const Node &node) const;
-                /* Operateur affectation */
+                /** @brief Assignment operator
+                 *  @param fnode FNode object
+                 *  @return FNode object
+                 */
                 virtual Node& operator=(const Node &node);
                 
-                /* Methode pour definir la position */
+                /** @brief Method to define position
+                 *  @param point position
+                 */
                 void setPosition(const Point &point);
-                /* Methode pour recuperer la position */
+                /** @brief Method to get position
+                 *  @return position
+                 */
                 Point getPosition() const;
-                /* Methode pour definir le noeud comme pres du bord */
+                /** @brief Method to define node as near polygon edge
+                 *  @param near true if node is near a polygon edge
+                 */
                 void setNearEdge(bool near);
-                /* Methode pour savoir si le noeud est pres du bord */
+                /** @brief Method to know if node is near polygon edge
+                 *  @return true if node is near polygon edge
+                 */
                 bool isNearEdge() const;
-                /* Methode pour definir le noeud a l'interieur du polygone */
+                /** @brief Method to define node as inside polygon
+                 *  @param near true if node is inside polygon
+                 */
                 void setInside(bool inside);
-                /* Methode pour savoir si le noeud est a l'interieur du polygone */
+                /** @brief Method to know if node is inside polygon
+                 *  @return true if node is inside polygon
+                 */
                 bool isInside() const;
                 
             protected:
                 
-                Point point_; // Position
-                bool near_; // Noeud pres du bord du polygone
-                bool inside_; // Noeud a l'interieur du polygone
+                /** @brief Position */  
+                Point point_;
+                /** @brief Boolean to know if node is near polygon edge */
+                bool near_;
+                /** @brief Boolean to know if node is inside polygon */
+                bool inside_;
         };
     }
 }
