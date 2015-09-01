@@ -49,7 +49,9 @@ Polygon::~Polygon()
 
 Segment& Polygon::operator[](const unsigned int& i)
 {
-    return listSeg_[i];
+    if (this->size()<0) return listSeg_[i];
+    else throw(Exception("Nothing to get with Polygon::operator[]"
+                                 ,__FILE__,__LINE__)) ;
 }
 
 Polygon& Polygon::operator=(const Polygon &polygon)
