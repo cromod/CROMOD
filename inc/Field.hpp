@@ -75,7 +75,13 @@ namespace Cromod {
                  *  @param node the chosen node
                  *  @return value on the node
                  */
-                 GeomAPI::Vector getValue(const GeomAPI::Node &node) const;
+                GeomAPI::Vector getValue(const GeomAPI::Node &node) const;
+
+                /** @brief Method to get nodes around
+                 *  @param node central node
+                 *  @return map of nodes around
+                 */
+                std::map<std::string,GeomAPI::Node> getNodesAround(const GeomAPI::Node &node);
                 
             private:
                 

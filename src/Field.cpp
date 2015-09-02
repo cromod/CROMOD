@@ -88,10 +88,29 @@ double Field::getStep() const
 
 void Field::setValue(const Node &node, const Vector &value)
 {
-    
+    int index = mesh_.index(node);
+    (*this)[index] = value;
 }
 
 Vector Field::getValue(const Node &node) const
 {
+    int index = mesh_.index(node);
+    Field field(*this);
+    return field[index];
+}
+
+map<string,Node> Field::getNodesAround(const Node &node)
+{
+    int index = mesh_.index(node);
+    vector<int> dim = mesh_.getDim();
+    if (!mesh_[index].isInside())
+        throw(Exception("Impossible to use Field::getNodesAround (Node object not inside)"
+                                ,__FILE__,__LINE__)) ;
     
+    map<string,Node> around;
+    around["up"]    = mesh_[index+dim[0]];
+    around["down"]  = mesh_[index-dim[0]];
+    around["right"] = mesh_[index+1];
+    around["left"]  = mesh_[index-1];
+    return around;
 }

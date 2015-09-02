@@ -50,9 +50,23 @@ Node& Mesh::operator[](const unsigned int& i)
     return listNode_[i] ;
 }
 
-unsigned int Mesh::size()
+unsigned int Mesh::size() const
 {
     return listNode_.size() ;
+}
+
+unsigned int Mesh::index(const Node &node) const
+{
+    if (this->size()==0) throw(Exception("Nothing to find with Mesh::index"
+                                ,__FILE__,__LINE__)) ;
+    
+    unsigned int it=0;
+    unsigned int size=this->size();
+    while (listNode_[it]!=node && it<(size-1)) it++;
+    
+    if (listNode_[it]==node) return it;
+    else throw(Exception("Node object not found with Mesh::index"
+                                ,__FILE__,__LINE__)) ;
 }
 
 void Mesh::addNode(Node node)
@@ -74,7 +88,7 @@ void Mesh::deleteAll()
     while (this->size()>0) this->deleteNode();
 }
 
-bool Mesh::isInit()
+bool Mesh::isInit() const
 {
     return init_ ;
 }
@@ -84,7 +98,7 @@ void Mesh::setInit(bool init)
     init_ = init ;
 }
 
-bool Mesh::isDetect()
+bool Mesh::isDetect() const
 {
     return detect_ ;
 }
@@ -116,7 +130,7 @@ void Mesh::setStep(double step)
                                 __FILE__,__LINE__)) ;
 }
 
-std::vector<int> Mesh::getDim()
+std::vector<int> Mesh::getDim() const
 {
     if (!this->isInit()) 
         Exception::logWarning("Mesh::getDim returns a wrong value",__FILE__,__LINE__);

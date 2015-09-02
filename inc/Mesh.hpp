@@ -33,7 +33,8 @@ namespace Cromod {
                 Node& operator[](const unsigned int& i);
                 
                 /* Methode pour recuperer le nbre de noeuds */
-                unsigned int size();
+                unsigned int size() const;
+		unsigned int index(const Node &node) const;
                 /* Methode pour rajouter un noeud */
                 void addNode(Node node);
                 /* Methode pour supprimer un noeud */
@@ -41,11 +42,11 @@ namespace Cromod {
                 /* Methode pour supprimer tous les noeuds */
                 void deleteAll();
                 /* Methode pour savoir si la grille est a l'etat initial */
-                bool isInit();
+                bool isInit() const;
                 /* Methode pour signaler la grille comme a l'etat initial */
                 void setInit(bool init);
                 /* Methode pour savoir si les noeuds pres du bord ont ete detectes */
-                bool isDetect();
+                bool isDetect() const;
                 /* Methode pour signaler les noeuds pres du bord comme detectes */
                 void setDetect(bool detect);
                 /* Methode pour recuperer le polygone du maillage */
@@ -57,7 +58,7 @@ namespace Cromod {
                 /* Methode pour definir la valeur du pas */
                 void setStep(double step);
                 /* Methode pour recuperer les dimensions du maillage */
-                std::vector<int> getDim();
+                std::vector<int> getDim() const;
                 /* Methode pour definir les dimensions du maillage */
                 void setDim(std::vector<int> dim);
                 
