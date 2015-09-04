@@ -59,9 +59,23 @@ Polygon& Polygon::operator=(const Polygon &polygon)
     listSeg_ = polygon.listSeg_ ;
 }
 
-unsigned int Polygon::size()
+unsigned int Polygon::size() const
 {
     return listSeg_.size();
+}
+
+unsigned int Polygon::index(const Segment &segment) const
+{
+    if (this->size()==0) throw(Exception("Nothing to find with Polygon::index"
+                                ,__FILE__,__LINE__)) ;
+    
+    unsigned int it=0;
+    unsigned int size=this->size();
+    while (listSeg_[it]!=segment && it<(size-1)) it++;
+    
+    if (listSeg_[it]==segment) return it;
+    else throw(Exception("Segment object not found with Polygon::index"
+                                ,__FILE__,__LINE__)) ;
 }
 
 void Polygon::addSegment(Segment seg)

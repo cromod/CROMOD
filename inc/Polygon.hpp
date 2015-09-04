@@ -38,7 +38,8 @@ namespace Cromod {
                 Polygon& operator=(const Polygon &polygon);
                 
                 /* Methode pour recuperer le nbre de cotes */
-                unsigned int size();
+                unsigned int size() const;
+		unsigned int index(const Segment &segment) const;
                 /* Methode pour rajouter un segment */
                 void addSegment(Segment seg);
                 /* Methode pour supprimer un segment */

@@ -83,7 +83,12 @@ namespace Cromod {
                  */
                 std::map<std::string,GeomAPI::Node> getNodesAround(const GeomAPI::Node &node);
                 
-            private:
+                /** @brief Method to build with a mesh
+                 *  @param mesh Mesh object
+                 */
+                void build(const GeomAPI::Mesh &mesh);
+
+            protected:
                 
                 /** @brief Mesh attribute */  
                 GeomAPI::Mesh mesh_; 

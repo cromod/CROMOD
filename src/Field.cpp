@@ -22,11 +22,18 @@ Field::Field(const Field& field)
 {
     mesh_ = field.mesh_;
     listValue_ = field.listValue_;
+    if (mesh_.size() != listValue_.size())
+        Exception::logWarning("Field argument of Field::Field is not consistent",__FILE__,__LINE__);
 }
 
 Field::Field(const Mesh& mesh)
 {
+    if ( !(mesh.isInit() && mesh.isDetect()) )
+        Exception::logWarning("Mesh argument of Field::Field is not complete",__FILE__,__LINE__);
     mesh_ = mesh;
+    int size = mesh_.size();
+    vector<Vector> listValue(size);
+    listValue_ = listValue;
 }
 
 Field::~Field() {
@@ -113,4 +120,14 @@ map<string,Node> Field::getNodesAround(const Node &node)
     around["right"] = mesh_[index+1];
     around["left"]  = mesh_[index-1];
     return around;
+}
+
+void Field::build(const Mesh &mesh)
+{
+    if ( !(mesh.isInit() && mesh.isDetect()) )
+        Exception::logWarning("Mesh argument of Field::build is not complete",__FILE__,__LINE__);
+    mesh_ = mesh;
+    int size = mesh_.size();
+    vector<Vector> listValue(size);
+    listValue_ = listValue;
 }

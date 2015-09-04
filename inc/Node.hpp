@@ -74,7 +74,7 @@ namespace Cromod {
                  */
                 bool isInside() const;
                 
-            protected:
+            private:
                 
                 /** @brief Position */  
                 Point point_;
