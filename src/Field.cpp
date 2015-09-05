@@ -99,11 +99,10 @@ void Field::setValue(const Node &node, const Vector &value)
     (*this)[index] = value;
 }
 
-Vector Field::getValue(const Node &node) const
+Vector Field::getValue(const Node &node)
 {
     int index = mesh_.index(node);
-    Field field(*this);
-    return field[index];
+    return (*this)[index];
 }
 
 map<string,Node> Field::getNodesAround(const Node &node)

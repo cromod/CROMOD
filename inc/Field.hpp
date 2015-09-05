@@ -75,7 +75,7 @@ namespace Cromod {
                  *  @param node the chosen node
                  *  @return value on the node
                  */
-                GeomAPI::Vector getValue(const GeomAPI::Node &node) const;
+                GeomAPI::Vector getValue(const GeomAPI::Node &node);
 
                 /** @brief Method to get nodes around
                  *  @param node central node
@@ -86,7 +86,7 @@ namespace Cromod {
                 /** @brief Method to build with a mesh
                  *  @param mesh Mesh object
                  */
-                void build(const GeomAPI::Mesh &mesh);
+                virtual void build(const GeomAPI::Mesh &mesh);
 
             protected:
                 

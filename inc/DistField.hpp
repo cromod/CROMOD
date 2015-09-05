@@ -13,12 +13,12 @@
 namespace Cromod {
     namespace FieldAPI {
         /** @class DistField DistField.hpp
-         *  @brief Class to define a field
+         *  @brief Class to define a field of distance
          */
         class DistField: public Field {
             
             public:
-                
+
                 /** @brief Default constructor */
                 DistField();
                 /** @brief Copy constructor */
@@ -30,12 +30,41 @@ namespace Cromod {
                 /** @brief Destructor */
                 virtual ~DistField();
 
+                /** @brief Method to set status
+                 *  @param status list of 2 booleans
+                 */
+                void setStatus(const GeomAPI::Node &node, const std::vector<bool> &status);
+                /** @brief Method to get status
+                 *  @return list of 2 booleans
+                 */
+                std::vector<bool> getStatus(const GeomAPI::Node &node);
+
                 /** @brief Method to set boundary condition
                  *  @param mesh Mesh object
                  */
-               void setBoundaryCondition(GeomAPI::Segment &segment);
+                void setBoundaryCondition(GeomAPI::Segment &segment);
 
+                /** @brief Method to build with a mesh
+                 *  @param mesh Mesh object
+                 */
+                void build(const GeomAPI::Mesh &mesh);
 
+                /** @brief Method to initialize field of distance */
+                void initialize();
+                /** @brief Method to compute field of distance 
+                 *  @details Fast marching
+                 */
+                void compute();
+                /** @brief Method to interpolate field of distance 
+                 *         thanks to values on mesh
+                 *  @details Fast marching
+                 */
+                void interpolate();
+
+            private:
+                
+                /** @brief List of nodes status (frozen/narrow) */  
+                std::vector< std::vector<bool> > listStatus_;
 
         };
     }
