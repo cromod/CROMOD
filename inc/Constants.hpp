@@ -1,8 +1,8 @@
-/* 
- * File:   Constants.hpp
- * Author: florent
- *
- * Created on 24 juin 2015, 20:42
+/** 
+ * @file Constants.hpp
+ * @brief Header file of constants
+ * @author cromod
+ * @date june 2015
  */
 
 #ifndef CONSTANTS_HPP
@@ -10,6 +10,7 @@
 
 namespace Cromod {
     namespace GeomAPI {
+        /** @brief Geometric tolerance */
         const double GEOM_TOLERANCE(1.e-6);
     }
 }
