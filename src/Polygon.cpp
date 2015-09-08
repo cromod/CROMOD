@@ -1,14 +1,13 @@
-/* 
- * File:   Polygon.cpp
- * Author: florent
- * 
- * Created on 25 juin 2015, 20:22
+/** 
+ * @file Polygon.cpp
+ * @brief Source file of Polygon class
+ * @author cromod
+ * @date june 2015
  */
 
-#include "Constants.hpp"
-#include "Segment.hpp"
 #include "Polygon.hpp"
 #include "Exception.hpp"
+#include "Constants.hpp"
 #include <list>
 #include <cmath>
 #include <algorithm>

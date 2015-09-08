@@ -1,86 +1,122 @@
-/* 
- * File:   Polygon.hpp
- * Author: florent
- *
- * Created on 25 juin 2015, 20:22
+/** 
+ * @file Polygon.hpp
+ * @brief Header file of Polygon class
+ * @author cromod
+ * @date june 2015
  */
 
 #ifndef POLYGON_HPP
 #define	POLYGON_HPP
 
 #include "Segment.hpp"
-#include "Vector.hpp"
 #include <map>
 #include <string>
 
 namespace Cromod {
     namespace GeomAPI {
-        /* 
-         * Classe Polygon
-         * Definition d'un polygone a partir d'une liste d'objets Segment
+        /** @class Polygon Polygon.hpp
+         *  @brief Class to define a polygon
          */
         class Polygon {
         
             public:
             
-                /* Constructeur par defaut */
+                /** @brief Default constructor */
                 Polygon();
-                /* Constructeur par copie */
+                /** @brief Copy constructor */
                 Polygon(const Polygon& polygon);
-                /* Constructeur utilisant une liste de points */
+                /** @brief Constructor
+                 *  @param listPoints list of points
+                 */
                 Polygon(const std::vector<Point>& listPoints);
-                /* Destructeur */
+                /** @brief Destructor */
                 virtual ~Polygon();
                 
-                /* Operateur [] */
+                /** @brief Index operator
+                 *  @param i index
+                 *  @return selected segment
+                 */
                 Segment& operator[](const unsigned int& i);
-                /* Operateur affectation */
+                /** @brief Assignment operator
+                 *  @param polygon Polygon object
+                 *  @return Polygon object
+                 */                
                 Polygon& operator=(const Polygon &polygon);
                 
-                /* Methode pour recuperer le nbre de cotes */
+                /** @brief Method to get size
+                 *  @return size
+                 */
                 unsigned int size() const;
-		unsigned int index(const Segment &segment) const;
-                /* Methode pour rajouter un segment */
+                /** @brief Method to get index
+                 *  @param segment Segment object
+                 *  @return index
+                 */
+                unsigned int index(const Segment &segment) const;
+                /** @brief Method to add segment
+                 *  @param seg Segment object
+                 */
                 void addSegment(Segment seg);
-                /* Methode pour supprimer un segment */
+                /** @brief Method to delete a segment */
                 void delSegment();
-                /* Methode pour supprimer tous les segments */
+                /** @brief Method to delete all segments */
                 void deleteAll();
-                /* Methode pour rajouter un point */
+                /** @brief Method to add a point
+                 *  @param point Point object
+                 */
                 void addPoint(const Point& point);
-                /* Methode pour recuperer la liste des segments */
+                /** @brief Method to get list of segments
+                 *  @return list of segments
+                 */
                 std::vector<Segment> getList();
-                /* Methode pour fournir la liste des segments */
+                /** @brief Method to set a list of segments
+                 *  @param listSeg list of segments
+                 */
                 void setList(const std::vector<Segment>& listSeg);
                 
-                /* Methode pour savoir si le polygone est ferme */
+                /** @brief Method to check if polygon is closed
+                 *  @return true if closed
+                 */
                 bool isClosed();
-                /* Methode pour fermer le polygone */
+                /** @brief Method to close a polygon */
                 void close();
-                /* Methode pour recuperer la liste de points */
+                /** @brief Method to get list of points
+                 *  @return list of points
+                 */
                 std::vector<Point> getPoints();
-                /* Methode pour recuperer un point hors du polygone */
+                /** @brief Method to get a point outside polygon
+                 *  @return point outside
+                 */
                 Point getOutside();
-                /* Methode pour recuperer les coordonnees extremes du polygone */
+                /** @brief Method to get extrem coordinates of polygon
+                 *  @return map of extrem coordinates
+                 */
                 std::map<std::string,double> getBottom();
                 
-                /* Methode pour savoir si le polygone est croise */
-                bool isSelfIntersect();
-                /* 
-                 * Methode pour recuperer le nombre d'intersections entre 
-                 * un segment et les cotes du polygone
+                /** @brief Method to check if polygon is crossed
+                 *  @return true if crossed
                  */
+                bool isSelfIntersect();
+                /** @brief Method to get number of intersections
+                 *         between a segment and a polygon
+                 *  @param segment Segment object
+                 *  @return number of intersections
+                 */              
                 int getNbIntersect(const Segment& segment);
-                /* Methode pour verifier si un point est sur un cote du polynome */
+                /** @brief Method to check if a point is on edge of polygon
+                 *  @param point Segment point
+                 *  @return true if point is on edge
+                 */
                 bool isOnEdge(const Point& point);
-                /* 
-                 * Methode pour verifier si un objet Point est a l'interieur du polygone
-                 * http://www.zebulon.fr/questions-reponses/points-interieur-d-un-polygone-149.html
+                /** @brief Method to check if a point is inside polygon
+                 *  @details http://www.zebulon.fr/questions-reponses/points-interieur-d-un-polygone-149.html
+                 *  @param point Point point
+                 *  @return true if point is inside
                  */
                 bool isInside(const Point& point_in);
             
             private:
                 
+                /** @brief list of segments */  
                 std::vector<Segment> listSeg_;
         };
     }
