@@ -23,13 +23,13 @@ Field::Field(const Field& field)
     mesh_ = field.mesh_;
     listValue_ = field.listValue_;
     if (mesh_.size() != listValue_.size())
-        Exception::logWarning("Field argument of Field::Field is not consistent",__FILE__,__LINE__);
+        Exception::logWarning("Field argument of Field::Field is not consistent",__FILENAME__,__LINE__);
 }
 
 Field::Field(const Mesh& mesh)
 {
     if ( !(mesh.isInit() && mesh.isDetect()) )
-        Exception::logWarning("Mesh argument of Field::Field is not complete",__FILE__,__LINE__);
+        Exception::logWarning("Mesh argument of Field::Field is not complete",__FILENAME__,__LINE__);
     mesh_ = mesh;
     int size = mesh_.size();
     vector<Vector> listValue(size);
@@ -43,7 +43,7 @@ Vector& Field::operator[](const unsigned int& i)
 {
     if (this->size()>0) return listValue_[i];
     else throw(Exception("Nothing to get with Field::operator[]"
-                                 ,__FILE__,__LINE__)) ;
+                                 ,__FILENAME__,__LINE__)) ;
 }
 
 Field& Field::operator=(const Field &field)
@@ -61,13 +61,13 @@ void Field::delValue()
 {
     if (this->size()>0) listValue_.pop_back();
     else throw(Exception("Nothing to delete with Field::delFNode"
-                                ,__FILE__,__LINE__)) ;
+                                ,__FILENAME__,__LINE__)) ;
 }
 
 void Field::deleteAll()
 {
     if (this->size()==0) throw(Exception("Nothing to delete with Field::deleteAll"
-                                ,__FILE__,__LINE__)) ;
+                                ,__FILENAME__,__LINE__)) ;
     while (this->size()>0) this->delValue();
 }
 
@@ -111,7 +111,7 @@ map<string,Node> Field::getNodesAround(const Node &node)
     vector<int> dim = mesh_.getDim();
     if (!mesh_[index].isInside())
         throw(Exception("Impossible to use Field::getNodesAround (Node object not inside)"
-                                ,__FILE__,__LINE__)) ;
+                                ,__FILENAME__,__LINE__)) ;
     
     map<string,Node> around;
     around["up"]    = mesh_[index+dim[0]];
@@ -124,7 +124,7 @@ map<string,Node> Field::getNodesAround(const Node &node)
 void Field::build(const Mesh &mesh)
 {
     if ( !(mesh.isInit() && mesh.isDetect()) )
-        Exception::logWarning("Mesh argument of Field::build is not complete",__FILE__,__LINE__);
+        Exception::logWarning("Mesh argument of Field::build is not complete",__FILENAME__,__LINE__);
     mesh_ = mesh;
     int size = mesh_.size();
     vector<Vector> listValue(size);

@@ -24,7 +24,7 @@ DistField::DistField(const DistField& distfield)
     listValue_ = distfield.listValue_;
     listStatus_ = distfield.listStatus_;
     if (mesh_.size() != listValue_.size() || mesh_.size() != listStatus_.size())
-        Exception::logWarning("DistField attributes are not consistent",__FILE__,__LINE__);
+        Exception::logWarning("DistField attributes are not consistent",__FILENAME__,__LINE__);
 }
 
 DistField::DistField(const Mesh& mesh): Field(mesh)

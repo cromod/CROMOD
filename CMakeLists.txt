@@ -2,6 +2,10 @@
 cmake_minimum_required(VERSION 2.8)
 project (CROMOD)
 
+# Add a macro __FILENAME__ to get file name without path
+set(FILENAME_FLAGS "-D__FILENAME__='\"$(subst ${CMAKE_SOURCE_DIR}/,,$(abspath $<))\"'")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${FILENAME_FLAGS}")
+
 # Launch modules
 set (CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/config" ${CMAKE_MODULE_PATH})
 include (FindLibraries)

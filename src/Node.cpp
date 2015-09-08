@@ -21,7 +21,7 @@ Node::Node() : point_(0.,2),
 Node::Node(const Node& node) 
 {
     if (node.point_.size()!=2) 
-        throw(Exception("Wrong vector<double> size in Node::Node",__FILE__,__LINE__)) ;
+        throw(Exception("Wrong vector<double> size in Node::Node",__FILENAME__,__LINE__)) ;
     point_ = node.point_;
     near_ = node.near_;
     inside_ = node.inside_;
@@ -30,7 +30,7 @@ Node::Node(const Node& node)
 Node::Node(const Point& point, bool near, bool inside)
 {
     if (point.size()!=2) 
-        throw(Exception("Wrong vector<double> size in Node::Node",__FILE__,__LINE__)) ;
+        throw(Exception("Wrong vector<double> size in Node::Node",__FILENAME__,__LINE__)) ;
     point_ = point;
     near_ = near;
     inside_ = inside;
@@ -52,7 +52,7 @@ bool Node::operator!=(const Node &node) const
 Node& Node::operator=(const Node &node)
 {
     if (node.point_.size()!=2) 
-        throw(Exception("Wrong vector<double> size in Node::operator=",__FILE__,__LINE__)) ;
+        throw(Exception("Wrong vector<double> size in Node::operator=",__FILENAME__,__LINE__)) ;
     point_ = node.point_;
     near_ = node.near_;
     inside_ = node.inside_;
@@ -61,7 +61,7 @@ Node& Node::operator=(const Node &node)
 void Node::setPosition(const Point &point)
 {
     if (point.size()!=2) 
-        throw(Exception("Wrong vector<double> size in Node::setPosition",__FILE__,__LINE__)) ;
+        throw(Exception("Wrong vector<double> size in Node::setPosition",__FILENAME__,__LINE__)) ;
     point_ = point;
 }
 

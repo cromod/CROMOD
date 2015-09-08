@@ -39,7 +39,7 @@ Polygon::Polygon(const vector<Point>& listPoints)
         }
     }
     else Exception::logWarning("Empty list of Point type in Polygon constructor"
-                                ,__FILE__,__LINE__);
+                                ,__FILENAME__,__LINE__);
 }
 
 Polygon::~Polygon() 
@@ -50,7 +50,7 @@ Segment& Polygon::operator[](const unsigned int& i)
 {
     if (this->size()>0) return listSeg_[i];
     else throw(Exception("Nothing to get with Polygon::operator[]"
-                                 ,__FILE__,__LINE__)) ;
+                                 ,__FILENAME__,__LINE__)) ;
 }
 
 Polygon& Polygon::operator=(const Polygon &polygon)
@@ -66,7 +66,7 @@ unsigned int Polygon::size() const
 unsigned int Polygon::index(const Segment &segment) const
 {
     if (this->size()==0) throw(Exception("Nothing to find with Polygon::index"
-                                ,__FILE__,__LINE__)) ;
+                                ,__FILENAME__,__LINE__)) ;
     
     unsigned int it=0;
     unsigned int size=this->size();
@@ -74,7 +74,7 @@ unsigned int Polygon::index(const Segment &segment) const
     
     if (listSeg_[it]==segment) return it;
     else throw(Exception("Segment object not found with Polygon::index"
-                                ,__FILE__,__LINE__)) ;
+                                ,__FILENAME__,__LINE__)) ;
 }
 
 void Polygon::addSegment(Segment seg)
@@ -85,7 +85,7 @@ void Polygon::addSegment(Segment seg)
         Segment seg_test(point1,point2);
         if (seg_test.getLength()>GEOM_TOLERANCE) {
             throw(Exception("Non-adjacent Segment argument in Polygon::addSegment"
-                                ,__FILE__,__LINE__)) ;
+                                ,__FILENAME__,__LINE__)) ;
         }
         else {
             seg.setOne(point1);
@@ -99,13 +99,13 @@ void Polygon::delSegment()
 {
     if (this->size()>0) listSeg_.pop_back();
     else throw(Exception("Nothing to delete with Polygon::delSegment"
-                                ,__FILE__,__LINE__)) ;
+                                ,__FILENAME__,__LINE__)) ;
 }
 
 void Polygon::deleteAll()
 {
     if (this->size()==0) throw(Exception("Nothing to delete with Polygon::deleteAll"
-                                ,__FILE__,__LINE__)) ;
+                                ,__FILENAME__,__LINE__)) ;
     while (this->size()>0) this->delSegment();
 }
 
@@ -118,7 +118,7 @@ void Polygon::addPoint(const Point& point)
     }
     else {
         throw(Exception("Adding a Point type is impossible with Polygon::addPoint"
-                                ,__FILE__,__LINE__)) ;
+                                ,__FILENAME__,__LINE__)) ;
     }
 }
 
@@ -138,7 +138,7 @@ bool Polygon::isClosed()
     unsigned int size = pol.size();
     
     if (size == 0) {
-        Exception::logWarning("No Segment object in Polygon",__FILE__,__LINE__);
+        Exception::logWarning("No Segment object in Polygon",__FILENAME__,__LINE__);
         return false;
     }
     
@@ -160,7 +160,7 @@ void Polygon::close()
         if (segment.getLength()>GEOM_TOLERANCE) this->addSegment(segment);
     }
     else Exception::logWarning("Nothing to close with Polygon::close"
-                                ,__FILE__,__LINE__);
+                                ,__FILENAME__,__LINE__);
 }
 
 vector<Point> Polygon::getPoints()
@@ -174,7 +174,7 @@ vector<Point> Polygon::getPoints()
 
     if (!(this->isClosed())) {
         Exception::logWarning("Using Polygon::getPoints with unclosed Polygon object"
-                                ,__FILE__,__LINE__);
+                                ,__FILENAME__,__LINE__);
         listPoints.push_back((*this)[size-1].getTwo());
     }
     
@@ -193,7 +193,7 @@ map<string,double> Polygon::getBottom()
     unsigned int size = this->size();
     if ( size == 0 ) {
         throw(Exception("Nothing to get with Polygon::getBottom"
-                                ,__FILE__,__LINE__)) ;
+                                ,__FILENAME__,__LINE__)) ;
     }
     
     vector<Point> list = this->getPoints();
@@ -220,13 +220,13 @@ bool Polygon::isSelfIntersect()
     Polygon pol(*this);
     if (!pol.isClosed()) {
         throw(Exception("Polygon object is not closed in Polygon::isSelfIntersect"
-                                ,__FILE__,__LINE__)) ;
+                                ,__FILENAME__,__LINE__)) ;
     }
     
     unsigned int size = pol.size();
     if ( size < 2 ) {
         throw(Exception("Nothing to check with Polygon::isSelfIntersect"
-                                ,__FILE__,__LINE__)) ;
+                                ,__FILENAME__,__LINE__)) ;
     }
     
     for(int i=0; i<size; i++) {

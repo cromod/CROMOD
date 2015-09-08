@@ -31,7 +31,7 @@ Segment::Segment(const Segment& seg)
 Segment::Segment(const Point &point1, const Point &point2, const bool &exit)
 {
     if (point1.size()!=2 || point2.size()!=2) 
-        throw(Exception("Wrong vector<double> size in Segment::Segment",__FILE__,__LINE__)) ;
+        throw(Exception("Wrong vector<double> size in Segment::Segment",__FILENAME__,__LINE__)) ;
     point1_ = point1 ;
     point2_ = point2 ;
     exit_ = exit ;
@@ -70,7 +70,7 @@ bool Segment::isExit() const
 void Segment::setOne(Point point1)
 {
     if (point1.size()!=2) 
-        throw(Exception("Wrong argument size in Segment::setOne",__FILE__,__LINE__)) ;
+        throw(Exception("Wrong argument size in Segment::setOne",__FILENAME__,__LINE__)) ;
     point1_ = point1 ;
 }
 
@@ -82,7 +82,7 @@ Point Segment::getOne() const
 void Segment::setTwo(Point point2)
 {
     if (point2.size()!=2) 
-        throw(Exception("Wrong argument size in Segment::setTwo",__FILE__,__LINE__)) ;
+        throw(Exception("Wrong argument size in Segment::setTwo",__FILENAME__,__LINE__)) ;
     point2_ = point2 ;
 }
 
@@ -94,7 +94,7 @@ Point Segment::getTwo() const
 void Segment::setPoints(Point point1,Point point2)
 {
     if (point1.size()!=2 || point2.size()!=2) 
-        throw(Exception("Wrong argument size in Segment::setPoints",__FILE__,__LINE__)) ;
+        throw(Exception("Wrong argument size in Segment::setPoints",__FILENAME__,__LINE__)) ;
     this->setOne(point1) ;
     this->setTwo(point2) ;
 }

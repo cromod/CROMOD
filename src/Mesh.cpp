@@ -30,9 +30,9 @@ Mesh::Mesh() : listNode_(),
 Mesh::Mesh(const Mesh& mesh) 
 {
     if (mesh.dim_.size()!=2) 
-        throw(Exception("mesh.dim_ out of range in Mesh::Mesh",__FILE__,__LINE__)) ;
+        throw(Exception("mesh.dim_ out of range in Mesh::Mesh",__FILENAME__,__LINE__)) ;
     if (mesh.step_<=0.)
-        throw(Exception("Wrong step value of mesh argument in Mesh::Mesh",__FILE__,__LINE__)) ;
+        throw(Exception("Wrong step value of mesh argument in Mesh::Mesh",__FILENAME__,__LINE__)) ;
     listNode_ = mesh.listNode_ ;
     polygon_ = mesh.polygon_ ;
     init_ = mesh.init_ ;
@@ -58,7 +58,7 @@ unsigned int Mesh::size() const
 unsigned int Mesh::index(const Node &node) const
 {
     if (this->size()==0) throw(Exception("Nothing to find with Mesh::index"
-                                ,__FILE__,__LINE__)) ;
+                                ,__FILENAME__,__LINE__)) ;
     
     unsigned int it=0;
     unsigned int size=this->size();
@@ -66,7 +66,7 @@ unsigned int Mesh::index(const Node &node) const
     
     if (listNode_[it]==node) return it;
     else throw(Exception("Node object not found with Mesh::index"
-                                ,__FILE__,__LINE__)) ;
+                                ,__FILENAME__,__LINE__)) ;
 }
 
 void Mesh::addNode(Node node)
@@ -78,13 +78,13 @@ void Mesh::deleteNode()
 {
     if (this->size()>0) listNode_.pop_back();
     else throw(Exception("Nothing to delete with Mesh::deleteNode"
-                                ,__FILE__,__LINE__)) ;
+                                ,__FILENAME__,__LINE__)) ;
 }
 
 void Mesh::deleteAll()
 {
     if (this->size()==0) throw(Exception("Nothing to delete with Mesh::deleteAll"
-                                ,__FILE__,__LINE__)) ;
+                                ,__FILENAME__,__LINE__)) ;
     while (this->size()>0) this->deleteNode();
 }
 
@@ -127,13 +127,13 @@ void Mesh::setStep(double step)
 {
     if (step > 0.) step_ = step ;
     else throw(Exception("Wrong value of step argument in Mesh::setStep",
-                                __FILE__,__LINE__)) ;
+                                __FILENAME__,__LINE__)) ;
 }
 
 std::vector<int> Mesh::getDim() const
 {
     if (!this->isInit()) 
-        Exception::logWarning("Mesh::getDim returns a wrong value",__FILE__,__LINE__);
+        Exception::logWarning("Mesh::getDim returns a wrong value",__FILENAME__,__LINE__);
     return dim_ ;
 }
 
@@ -141,7 +141,7 @@ void Mesh::setDim(std::vector<int> dim)
 {
     if (dim[0]*dim[1]==this->size()) dim_ = dim ;
     else Exception::logWarning("Argument does not suit in Mesh::setDim",
-                                __FILE__,__LINE__) ;
+                                __FILENAME__,__LINE__) ;
 }
 
 void Mesh::setInitGrid()
@@ -167,7 +167,7 @@ void Mesh::setInitGrid()
     // Test sur le point d'arrivee
     if (abs(coord["xmax"]+step-point[0])>GEOM_TOLERANCE || abs(coord["ymax"]+step-point[1])>GEOM_TOLERANCE)
         Exception::logWarning("Corrupted initial grid in Mesh::setInitGrid",
-                                __FILE__,__LINE__);
+                                __FILENAME__,__LINE__);
     this->setInit(true);
     // Enregistrement des dimensions de la grille
     vector<int> dim;
