@@ -6,7 +6,6 @@
  */
 
 #include "Mesh.hpp"
-#include "Vector.hpp"
 #include "Exception.hpp"
 #include "Constants.hpp"
 #include <cmath>
