@@ -1,8 +1,8 @@
-/* 
- * File:   Exception.hpp
- * Author: florent
- *
- * Created on 20 juin 2015, 08:58
+/** 
+ * @file Exception.hpp
+ * @brief Header file of Exception class
+ * @author cromod
+ * @date june 2015
  */
 
 #ifndef EXCEPTION_HPP
@@ -13,15 +13,32 @@
 
 namespace Cromod {
     namespace Tools {
-        
+        /** @class Exception Exception.hpp
+         *  @brief Class to define a exception
+         */        
         class Exception : public std::exception {
-        public:
-            Exception(std::string Msg, const char * File, int Line) throw() ;
-            virtual ~Exception() throw() ;
-            virtual const char * what() const throw() ;
-            static void logWarning(std::string Msg, const char * File, int Line) ;
-        private:
-            std::string msg_ ;
+            public:
+                /** @brief Constructor
+                 *  @param Msg error message
+                 *  @param File file name
+                 *  @param Line line number
+                 */
+                Exception(std::string Msg, const char * File, int Line) throw() ;
+                /** @brief Destructor */
+                virtual ~Exception() throw() ;
+                /** @brief Method to get error message
+                 *  @return character string
+                 */
+                virtual const char * what() const throw() ;
+                /** @brief Static function to generate warning message
+                 *  @param Msg error message
+                 *  @param File file name
+                 *  @param Line line number
+                 */
+                static void logWarning(std::string Msg, const char * File, int Line) ;
+            private:
+                /** @brief Error message */ 
+                std::string msg_ ;
             
         };
     }

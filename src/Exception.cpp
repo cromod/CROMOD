@@ -1,8 +1,8 @@
-/* 
- * File:   Exception.cpp
- * Author: florent
- * 
- * Created on 20 juin 2015, 08:58
+/** 
+ * @file Exception.cpp
+ * @brief Source file of Exception class
+ * @author cromod
+ * @date june 2015
  */
 
 #include "Exception.hpp"
