@@ -1,8 +1,8 @@
-/* 
- * File:   Mesh.cpp
- * Author: florent
- * 
- * Created on 27 juillet 2015, 20:59
+/** 
+ * @file Mesh.cpp
+ * @brief Source file of Mesh class
+ * @author cromod
+ * @date july 2015
  */
 
 #include "Mesh.hpp"
@@ -10,8 +10,6 @@
 #include "Constants.hpp"
 #include <cmath>
 #include <iostream>
-#include <string>
-#include <map>
 
 using namespace Cromod::GeomAPI;
 using namespace Cromod::Tools;

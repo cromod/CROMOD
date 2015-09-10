@@ -1,8 +1,8 @@
-/* 
- * File:   Mesh.hpp
- * Author: florent
- *
- * Created on 27 juillet 2015, 20:59
+/** 
+ * @file Mesh.hpp
+ * @brief Header file of Mesh class
+ * @author cromod
+ * @date july 2015
  */
 
 #ifndef MESH_HPP
@@ -13,71 +13,106 @@
 
 namespace Cromod {
     namespace GeomAPI {
-        /* 
-         * Classe Mesh
-         * Definition d'un maillage
+        /** @class Mesh Mesh.hpp
+         *  @brief Class to define a mesh
          */
         class Mesh {
             
             public:
                 
-                /* Constructeur par defaut */
+                /** @brief Default constructor */
                 Mesh();
-                /* Constructeur par copie */
+                /** @brief Copy constructor */
                 Mesh(const Mesh& mesh);
-                /* Destructeur */
+                /** @brief Destructor */
                 virtual ~Mesh();
                 
-                /* Operateur [] */
+                /** @brief Index operator
+                 *  @param i index
+                 *  @return the pointed node
+                 */
                 Node& operator[](const unsigned int& i);
                 
-                /* Methode pour recuperer le nbre de noeuds */
+                /** @brief Method to get size
+                 *  @return size
+                 */
                 unsigned int size() const;
-		unsigned int index(const Node &node) const;
-                /* Methode pour rajouter un noeud */
+                /** @brief Method to get index
+                 *  @param Node object
+                 *  @return index
+                 */
+                unsigned int index(const Node &node) const;
+                /** @brief Method to add node
+                 *  @param node Node object
+                 */
                 void addNode(Node node);
-                /* Methode pour supprimer un noeud */
+                /** @brief Method to delete a node */
                 void deleteNode();
-                /* Methode pour supprimer tous les noeuds */
+                /** @brief Method to delete every node */
                 void deleteAll();
-                /* Methode pour savoir si la grille est a l'etat initial */
+                
+                /** @brief Method to check if mesh is initialized
+                 *  @return true if initialized
+                 */
                 bool isInit() const;
-                /* Methode pour signaler la grille comme a l'etat initial */
+                /** @brief Method to define mesh as initialized
+                 *  @param init true if initialized
+                 */
                 void setInit(bool init);
-                /* Methode pour savoir si les noeuds pres du bord ont ete detectes */
+                /** @brief Method to check if mesh is detected
+                 *  @return true if detected
+                 */
                 bool isDetect() const;
-                /* Methode pour signaler les noeuds pres du bord comme detectes */
+                /** @brief Method to define mesh as detected
+                 *  @param detect true if detected
+                 */
                 void setDetect(bool detect);
-                /* Methode pour recuperer le polygone du maillage */
+                /** @brief Method to get polygon
+                 *  @return Polygon object
+                 */
                 Polygon getPolygon();
-                /* Methode pour definir le polygone du maillage */
+                /** @brief Method to set polygon
+                 *  @param polygon Polygon object
+                 */
                 void setPolygon(Polygon polygon);
-                /* Methode pour recuperer la valeur du pas */
+                /** @brief Method to get step
+                 *  @return mesh step
+                 */
                 double getStep();
-                /* Methode pour definir la valeur du pas */
+                /** @brief Method to set step
+                 *  @param step mesh step
+                 */
                 void setStep(double step);
-                /* Methode pour recuperer les dimensions du maillage */
+                /** @brief Method to get dimensions
+                 *  @return list of dimensions
+                 */
                 std::vector<int> getDim() const;
-                /* Methode pour definir les dimensions du maillage */
+                /** @brief Method to set dimensions
+                 *  @param dim list of dimensions
+                 */
                 void setDim(std::vector<int> dim);
                 
-                /* Methode pour construire la grille initiale du maillage */
+                /** @brief Method to set the initial grid of mesh */
                 void setInitGrid();
-                /* 
-                 * Methode pour detecter les noeuds interieurs et pres des bords
-                 * Calcul de la distance minimale entre les noeuds et les bords
+                /** @brief Method to detect nodes inside polygon and near edges
+                 *  @details Compute minimum distance between nodes and edges
                  */
                 void detectNode();
-                
-                
+
             private:
                 
-                std::vector<Node> listNode_; //liste des noeuds
-                Polygon polygon_; //polygone a mailler
-                bool init_; //grille initiale
-                bool detect_; //noeuds detectes
-                double step_; //pas du maillage
-                std::vector<int> dim_; //dimensions de la grille initiale
+                /** @brief list of nodes */  
+                std::vector<Node> listNode_;
+                /** @brief polygon */  
+                Polygon polygon_;
+                /** @brief initialisation boolean */ 
+                bool init_;
+                /** @brief detection boolean */ 
+                bool detect_;
+                 /** @brief mesh step */                
+                double step_;
+                 /** @brief list of dimensions */ 
+                std::vector<int> dim_;
         };
     }
 }
