@@ -51,6 +51,12 @@ namespace Cromod {
 
                 /** @brief Method to initialize field of distance */
                 void initialize();
+                /** @brief Function to compute relative error
+                 *  @param val1 first value
+                 *  @param val2 second value
+                 *  @return relative error
+                 */
+                static double computeRelErr(double val1, double val2);
                 /** @brief Method to compute field of distance 
                  *  @details Fast marching
                  */

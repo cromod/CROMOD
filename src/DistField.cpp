@@ -7,6 +7,9 @@
 
 #include "DistField.hpp"
 #include "Exception.hpp"
+#include "Constants.hpp"
+#include <cmath>
+#include <algorithm>
 
 using namespace Cromod::GeomAPI;
 using namespace Cromod::FieldAPI;
@@ -119,5 +122,73 @@ void DistField::initialize()
             }
         }
         else if (this->getStatus(mesh_[i])==unknown) this->setValue(mesh_[i],inf);
+    }
+}
+
+double DistField::computeRelErr(double val1, double val2)
+{
+    if(val1!=0.) return abs(1.-val2/val1);
+    else if(val2!=0.) return abs(1.-val1/val2);
+    else return 0.;
+}
+
+void DistField::compute()
+{
+    int size = mesh_.size();
+    double step(this->getStep());
+    bool flag = true;
+    double min_val(0.);
+    
+    // Definition of status possibilities
+    vector<bool> unknown(2,false);
+    vector<bool> frozen(unknown);
+    frozen[0] = true;
+    vector<bool> narrow(unknown);
+    narrow[1] = true;
+
+    while(flag)
+    {
+         vector<double> listVal;
+         vector<Node> listNode;
+
+         for(int i=0; i<size; i++)
+         {
+             if( this->getStatus(mesh_[i])==narrow )
+             {
+                 map<string,Node> around = this->getNodesAround(mesh_[i]);
+                 double d1 = min(this->getValue(around["right"])[0],this->getValue(around["left"])[0]);
+                 double d2 = min(this->getValue(around["up"])[0],this->getValue(around["down"])[0]);
+                 double dist;
+                 if( abs(d1-d2) < step ) dist = ( d1+d2 + sqrt( 2.*pow(step,2.) - pow(d1-d2,2.) ) ) / 2.;
+                 else dist = min(d1,d2) + step;
+                 listVal.push_back(dist);
+                 listNode.push_back(mesh_[i]);
+                 Vector vect(dist,1);
+                 this->setValue(mesh_[i],vect);
+             }
+         }
+
+         if( !listVal.empty() )
+         {
+             min_val = *min_element(listVal.begin(),listVal.end());
+             for(int i=0; i<listVal.size(); i++)
+             {
+                 if( computeRelErr(listVal[i],min_val) < VAL_TOLERANCE )
+                 {  
+                     Node node = listNode[i];
+                     this->setStatus(node,frozen);
+                     map<string,Node> around = this->getNodesAround(node);
+                     if( this->getStatus(around["right"])==unknown && around["right"].isInside() )
+                         this->setStatus(around["right"],narrow);
+                     if( this->getStatus(around["left"])==unknown && around["left"].isInside() )
+                         this->setStatus(around["left"],narrow);
+                     if( this->getStatus(around["up"])==unknown && around["up"].isInside() )
+                         this->setStatus(around["up"],narrow);
+                     if( this->getStatus(around["down"])==unknown && around["down"].isInside() )
+                         this->setStatus(around["down"],narrow);
+                 }
+             }
+         } 
+         else flag = false;
     }
 }

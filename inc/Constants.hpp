@@ -13,6 +13,10 @@ namespace Cromod {
         /** @brief Geometric tolerance */
         const double GEOM_TOLERANCE(1.e-6);
     }
+    namespace FieldAPI {
+        /** @brief Value tolerance */
+        const double VAL_TOLERANCE(1.e-6);
+    }
 }
 
 #endif	/* CONSTANTS_HPP */
