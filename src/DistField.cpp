@@ -125,13 +125,6 @@ void DistField::initialize()
     }
 }
 
-double DistField::computeRelErr(double val1, double val2)
-{
-    if(val1!=0.) return abs(1.-val2/val1);
-    else if(val2!=0.) return abs(1.-val1/val2);
-    else return 0.;
-}
-
 void DistField::compute()
 {
     int size = mesh_.size();
@@ -173,7 +166,7 @@ void DistField::compute()
              min_val = *min_element(listVal.begin(),listVal.end());
              for(int i=0; i<listVal.size(); i++)
              {
-                 if( computeRelErr(listVal[i],min_val) < VAL_TOLERANCE )
+                 if( Field::computeRelErr(listVal[i],min_val) < VAL_TOLERANCE )
                  {  
                      Node node = listNode[i];
                      this->setStatus(node,frozen);
@@ -191,4 +184,47 @@ void DistField::compute()
          } 
          else flag = false;
     }
+}
+
+double DistField::interpolate(double x, double y)
+{
+    double step(this->getStep());
+    Mesh mesh(this->getMesh());
+    double pt[] = {x,y};
+    Point point(pt,2);
+    Polygon polygon(mesh.getPolygon());
+    map<string,double> coord(polygon.getBottom());
+
+    int nx = mesh.getDim()[0];
+    int index = static_cast<int>((x-coord["xmin"])/step+1.)
+                  + static_cast<int>((y-coord["ymin"])/step+1.)*nx;
+
+    if(polygon.isInside(point))
+    {
+        Point pt_a(mesh[index].getPosition());
+        Segment seg(point,pt_a);
+        if( seg.getLength() < step*sqrt(2.) )
+        {
+            vector<Point> listPts;
+            listPts.push_back(pt_a);
+            listPts.push_back(mesh[index+1].getPosition());
+            listPts.push_back(mesh[index+1+nx].getPosition());
+            listPts.push_back(mesh[index+nx].getPosition());
+            Polygon square(listPts);
+            if(square.isInside(point))
+            {
+                vector<double> listVal;  
+                listVal.push_back(this->getValue(mesh[index])[0]); 
+                listVal.push_back(this->getValue(mesh[index+1])[0]); 
+                listVal.push_back(this->getValue(mesh[index+1+nx])[0]); 
+                listVal.push_back(this->getValue(mesh[index+nx])[0]); 
+                double val = Field::bilinearInt(listPts,listVal,point);
+                if( val < 0. ) val = 0.;
+                return val;
+            }
+            else return INFINITY;
+        }
+        else return INFINITY;
+    }
+    else return INFINITY;
 }

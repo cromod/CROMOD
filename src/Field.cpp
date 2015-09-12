@@ -130,3 +130,27 @@ void Field::build(const Mesh &mesh)
     vector<Vector> listValue(size);
     listValue_ = listValue;
 }
+
+double Field::computeRelErr(double val1, double val2)
+{
+    if(val1!=0.) return abs(1.-val2/val1);
+    else if(val2!=0.) return abs(1.-val1/val2);
+    else return 0.;
+}
+
+double Field::bilinearInt(vector<Point> listPts, vector<double> listVal, Point point)
+{
+      Polygon pol(listPts);
+      if( pol.isInside(point) )
+      {
+          double x = (point[0]-listPts[0][0])/(listPts[1][0]-listPts[0][0]);
+          double y = (point[1]-listPts[0][1])/(listPts[2][1]-listPts[0][1]);
+          double a00 = listVal[0];
+          double a10 = listVal[1] - listVal[0];
+          double a01 = listVal[3] - listVal[0];
+          double a11 = listVal[2] - listVal[0] - (listVal[3] - listVal[1]);
+          return a00 + a10*x + a01*y + a11*x*y;
+      }
+      else throw(Exception("Impossible to use Field::BilinearInt (point outside area)"
+                                   ,__FILENAME__,__LINE__)) ;
+}

@@ -88,6 +88,22 @@ namespace Cromod {
                  */
                 virtual void build(const GeomAPI::Mesh &mesh);
 
+                /** @brief Function to compute relative error
+                 *  @param val1 first value
+                 *  @param val2 second value
+                 *  @return relative error
+                 */
+                static double computeRelErr(double val1, double val2);
+                /** @brief Function to make bilinear interpolation between 4 points
+                 *  @details http://en.wikipedia.org/wiki/Bilinear_interpolation
+                 *  @param listPts list of points
+                 *  @param listVal list of values
+                 *  @param point point to interpolate
+                 *  @return interpolated value
+                 */
+                static double bilinearInt(std::vector<GeomAPI::Point> listPts, 
+                                          std::vector<double> listVal, GeomAPI::Point point);
+
             protected:
                 
                 /** @brief Mesh attribute */  
