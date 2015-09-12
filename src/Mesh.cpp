@@ -10,6 +10,7 @@
 #include "Constants.hpp"
 #include <cmath>
 #include <iostream>
+#include <algorithm>
 
 using namespace Cromod::GeomAPI;
 using namespace Cromod::Tools;
@@ -52,16 +53,16 @@ unsigned int Mesh::size() const
     return listNode_.size() ;
 }
 
-unsigned int Mesh::index(const Node &node) const
+unsigned int Mesh::index(const Node &node)
 {
     if (this->size()==0) throw(Exception("Nothing to find with Mesh::index"
                                 ,__FILENAME__,__LINE__)) ;
+
+    vector<Node>::iterator first = listNode_.begin();
+    vector<Node>::iterator last = listNode_.end();
+    vector<Node>::iterator it = find(first,last,node);
     
-    unsigned int it=0;
-    unsigned int size=this->size();
-    while (listNode_[it]!=node && it<(size-1)) it++;
-    
-    if (listNode_[it]==node) return it;
+    if ( it!=last ) return static_cast<unsigned int>(it-first);
     else throw(Exception("Node object not found with Mesh::index"
                                 ,__FILENAME__,__LINE__)) ;
 }

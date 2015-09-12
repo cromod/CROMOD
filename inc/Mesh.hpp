@@ -41,7 +41,7 @@ namespace Cromod {
                  *  @param Node object
                  *  @return index
                  */
-                unsigned int index(const Node &node) const;
+                unsigned int index(const Node &node);
                 /** @brief Method to add node
                  *  @param node Node object
                  */
