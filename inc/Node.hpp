@@ -44,8 +44,8 @@ namespace Cromod {
                  */
                 virtual bool operator!=(const Node &node) const;
                 /** @brief Assignment operator
-                 *  @param fnode FNode object
-                 *  @return FNode object
+                 *  @param node Node object
+                 *  @return Node object
                  */
                 virtual Node& operator=(const Node &node);
                 
