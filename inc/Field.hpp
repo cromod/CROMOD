@@ -9,7 +9,6 @@
 #define	FIELD_HPP
 
 #include "Mesh.hpp"
-#include "Constants.hpp"
 
 namespace Cromod {
     namespace FieldAPI {

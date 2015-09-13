@@ -7,7 +7,6 @@
 
 #include "Mesh.hpp"
 #include "Exception.hpp"
-#include "Constants.hpp"
 #include <cmath>
 #include <iostream>
 #include <algorithm>

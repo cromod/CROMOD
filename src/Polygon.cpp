@@ -7,7 +7,6 @@
 
 #include "Polygon.hpp"
 #include "Exception.hpp"
-#include "Constants.hpp"
 #include <list>
 #include <cmath>
 #include <algorithm>
