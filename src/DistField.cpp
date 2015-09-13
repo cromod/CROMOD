@@ -7,10 +7,8 @@
 
 #include "DistField.hpp"
 #include "Exception.hpp"
-#include "Constants.hpp"
 #include <cmath>
 #include <algorithm>
-#include <iostream>
 
 using namespace Cromod::GeomAPI;
 using namespace Cromod::FieldAPI;
@@ -39,15 +37,25 @@ DistField::DistField(const Mesh& mesh)
 DistField::~DistField() {
 }
 
-void DistField::setStatus(const Node &node, const vector<bool> &status)
+void DistField::setStatus(const Node &node, Status status)
 {
     int index = mesh_.index(node);
     listStatus_[index] = status;
 }
 
-vector<bool> DistField::getStatus(const Node &node)
+Status DistField::getStatus(const Node &node)
 {
     int index = mesh_.index(node);
+    return listStatus_[index];
+}
+
+void DistField::setStatus(int index, Status status)
+{
+    listStatus_[index] = status;
+}
+
+Status DistField::getStatus(int index)
+{
     return listStatus_[index];
 }
 
@@ -58,17 +66,14 @@ void DistField::setBoundaryCondition(Segment &segment)
     segment.setExit(true);
     polygon[index] = segment;
     mesh_.setPolygon(polygon);
-    
-    vector<bool> frozen(2,false);
-    frozen[0] = true;
     Vector value(0.,1);
     
     int size = this->size();
     double step = this->getStep();
     for(int i=0; i<size; i++) {
         if (segment.getMinDist(mesh_[i].getPosition())<step && mesh_[i].isInside()) {
-            this->setStatus(mesh_[i],frozen);
-            this->setValue(mesh_[i],value);
+            this->setStatus(i,FROZEN);
+            this->setValue(i,value);
         }
     }
 }
@@ -77,8 +82,7 @@ void DistField::build(const Mesh &mesh)
 {
     this->Field::build(mesh);
     int size = mesh_.size();
-    vector<bool> status(2,false);
-    vector< vector<bool> > listStatus(size,status);
+    vector<Status> listStatus(size,UNKNOWN);
     listStatus_ = listStatus;
 }
 
@@ -88,80 +92,64 @@ void DistField::initialize()
     
     Vector step(this->getStep(),1); // step value
     Vector inf(INFINITY,1); // infinity value
-    
-    // Definition of status possibilities
-    vector<bool> unknown(2,false);
-    vector<bool> frozen(unknown);
-    frozen[0] = true;
-    vector<bool> narrow(unknown);
-    narrow[1] = true;
 
     for(int i=0; i<size; i++)
     {
-        if (this->getStatus(mesh_[i])==frozen) 
+        if (this->getStatus(i)==FROZEN) 
         {
-            map<string,Node> around = this->getNodesAround(mesh_[i]);
-            if (this->getStatus(around["up"])==unknown && around["up"].isInside()) {
-                this->setStatus(around["up"],narrow);
-                this->setValue(around["up"],step);
+            map<Around,int> around = this->getNodesAround(i);
+            if (this->getStatus(around[UP])==UNKNOWN && mesh_[around[UP]].isInside()) {
+                this->setStatus(around[UP],NARROW);
+                this->setValue(around[UP],step);
             }
-            if (this->getStatus(around["down"])==unknown && around["down"].isInside()) {
-                this->setStatus(around["down"],narrow);
-                this->setValue(around["down"],step);
+            if (this->getStatus(around[DOWN])==UNKNOWN && mesh_[around[DOWN]].isInside()) {
+                this->setStatus(around[DOWN],NARROW);
+                this->setValue(around[DOWN],step);
             }
-            if (this->getStatus(around["right"])==unknown && around["right"].isInside()) {
-                this->setStatus(around["right"],narrow);
-                this->setValue(around["right"],step);
+            if (this->getStatus(around[RIGHT])==UNKNOWN && mesh_[around[RIGHT]].isInside()) {
+                this->setStatus(around[RIGHT],NARROW);
+                this->setValue(around[RIGHT],step);
             }
-            if (this->getStatus(around["left"])==unknown && around["left"].isInside()) {
-                this->setStatus(around["left"],narrow);
-                this->setValue(around["left"],step);
+            if (this->getStatus(around[LEFT])==UNKNOWN && mesh_[around[LEFT]].isInside()) {
+                this->setStatus(around[LEFT],NARROW);
+                this->setValue(around[LEFT],step);
             }
         }
-        else if (this->getStatus(mesh_[i])==unknown) this->setValue(mesh_[i],inf);
     }
 }
 
 void DistField::compute()
 {
     int size = mesh_.size();
+    
     double step(this->getStep());
-    bool flag = true;
     double min_val(0.);
+    double d1(0.);
+    double d2(0.);
+    Vector dist(0.,1);
     
-    // Definition of status possibilities
-    vector<bool> unknown(2,false);
-    vector<bool> frozen(unknown);
-    frozen[0] = true;
-    vector<bool> narrow(unknown);
-    narrow[1] = true;
-    
-    Vector vect(0.,1);
-    vector<double> listVal;
-    vector<Node> listNode;
+    bool flag = true;
+    map<Around,int> around;
     
     while(flag)
     {
-         listVal.clear();
-         listNode.clear();
+         vector<double> listVal;
+         vector<int> listNode;
     
          for(int i=0; i<size; i++)
          {
-             if( this->getStatus(mesh_[i])==narrow )
+             if( this->getStatus(i)==NARROW )
              {
-                 map<string,Node> around = this->getNodesAround(mesh_[i]);
-                 double d1 = min(this->getValue(around["right"])[0],this->getValue(around["left"])[0]);
-                 double d2 = min(this->getValue(around["up"])[0],this->getValue(around["down"])[0]);
-                 double dist;
-                 if( abs(d1-d2) < step ) dist = ( d1+d2 + sqrt( 2.*pow(step,2.) - pow(d1-d2,2.) ) ) / 2.;
-                 else dist = min(d1,d2) + step;
-                 listVal.push_back(dist);
-                 listNode.push_back(mesh_[i]);
-                 vect[0] = dist;
-                 this->setValue(mesh_[i],vect);
+                 around = this->getNodesAround(i);
+                 d1 = min(this->getValue(around[RIGHT])[0],this->getValue(around[LEFT])[0]);
+                 d2 = min(this->getValue(around[UP])[0],this->getValue(around[DOWN])[0]);
+                 if( abs(d1-d2) < step ) dist[0] = ( d1+d2 + sqrt( 2.*pow(step,2.) - pow(d1-d2,2.) ) ) / 2.;
+                 else dist[0] = min(d1,d2) + step;
+                 listVal.push_back(dist[0]);
+                 listNode.push_back(i);
+                 this->setValue(i,dist);
              }
          }
-         cout << listVal.size() << endl;
          if( !listVal.empty() )
          {
              min_val = *min_element(listVal.begin(),listVal.end());
@@ -169,20 +157,20 @@ void DistField::compute()
              {
                  if( Field::computeRelErr(listVal[i],min_val) < VAL_TOLERANCE )
                  {  
-                     Node node = listNode[i];
-                     this->setStatus(node,frozen);
-                     map<string,Node> around = this->getNodesAround(node);
-                     if( this->getStatus(around["right"])==unknown && around["right"].isInside() )
-                         this->setStatus(around["right"],narrow);
-                     if( this->getStatus(around["left"])==unknown && around["left"].isInside() )
-                         this->setStatus(around["left"],narrow);
-                     if( this->getStatus(around["up"])==unknown && around["up"].isInside() )
-                         this->setStatus(around["up"],narrow);
-                     if( this->getStatus(around["down"])==unknown && around["down"].isInside() )
-                         this->setStatus(around["down"],narrow);
+                     int index = listNode[i];
+                     this->setStatus(index,FROZEN);
+                     around = this->getNodesAround(index);
+                     if( this->getStatus(around[RIGHT])==UNKNOWN && mesh_[around[RIGHT]].isInside() )
+                         this->setStatus(around[RIGHT],NARROW);
+                     if( this->getStatus(around[LEFT])==UNKNOWN && mesh_[around[LEFT]].isInside() )
+                         this->setStatus(around[LEFT],NARROW);
+                     if( this->getStatus(around[UP])==UNKNOWN && mesh_[around[UP]].isInside() )
+                         this->setStatus(around[UP],NARROW);
+                     if( this->getStatus(around[DOWN])==UNKNOWN && mesh_[around[DOWN]].isInside() )
+                         this->setStatus(around[DOWN],NARROW);
                  }
              }
-         } 
+         }
          else flag = false;
     }
 }
@@ -194,11 +182,11 @@ double DistField::interpolate(double x, double y)
     double pt[] = {x,y};
     Point point(pt,2);
     Polygon polygon(mesh.getPolygon());
-    map<string,double> coord(polygon.getBottom());
+    map<Bottom,double> coord(polygon.getBottom());
 
     int nx = mesh.getDim()[0];
-    int index = static_cast<int>((x-coord["xmin"])/step+1.)
-                  + static_cast<int>((y-coord["ymin"])/step+1.)*nx;
+    int index = static_cast<int>((x-coord[XMIN])/step+1.)
+                  + static_cast<int>((y-coord[YMIN])/step+1.)*nx;
 
     if(polygon.isInside(point))
     {
@@ -214,11 +202,10 @@ double DistField::interpolate(double x, double y)
             if(square.isInside(point))
             {
                 vector<double> listVal;  
-                listVal.push_back(this->getValue(mesh[index])[0]); 
-                listVal.push_back(this->getValue(mesh[index+1])[0]); 
-                listVal.push_back(this->getValue(mesh[index+1+nx])[0]); 
-                listVal.push_back(this->getValue(mesh[index+nx])[0]); 
-		for(vector<double>::iterator l=listVal.begin(); l!=listVal.end(); ++l) cout << *l << endl;
+                listVal.push_back(this->getValue(index)[0]); 
+                listVal.push_back(this->getValue(index+1)[0]); 
+                listVal.push_back(this->getValue(index+1+nx)[0]); 
+                listVal.push_back(this->getValue(index+nx)[0]); 
                 double val = Field::bilinearInt(listPts,listVal,point);
                 if( val < 0. ) val = 0.;
                 return val;

@@ -31,13 +31,25 @@ namespace Cromod {
                 virtual ~DistField();
 
                 /** @brief Method to set status
-                 *  @param status list of 2 booleans
+                 *  @param node the chosen node
+                 *  @param status Status type
                  */
-                void setStatus(const GeomAPI::Node &node, const std::vector<bool> &status);
+                void setStatus(const GeomAPI::Node &node, Status status);
+                /** @brief Method to set status
+                 *  @param index index of the chosen node
+                 *  @param status Status type
+                 */
+                void setStatus(int index, Status status);
                 /** @brief Method to get status
-                 *  @return list of 2 booleans
+                 *  @param node the chosen node
+                 *  @return status
                  */
-                std::vector<bool> getStatus(const GeomAPI::Node &node);
+                Status getStatus(const GeomAPI::Node &node);
+                /** @brief Method to get status
+                 *  @param index index of the chosen node
+                 *  @return status
+                 */
+                Status getStatus(int index);
 
                 /** @brief Method to set boundary condition
                  *  @param mesh Mesh object
@@ -65,7 +77,7 @@ namespace Cromod {
             private:
                 
                 /** @brief List of nodes status (frozen/narrow) */  
-                std::vector< std::vector<bool> > listStatus_;
+                std::vector<Status> listStatus_;
 
         };
     }

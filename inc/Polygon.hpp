@@ -10,7 +10,7 @@
 
 #include "Segment.hpp"
 #include <map>
-#include <string>
+#include "Constants.hpp"
 
 namespace Cromod {
     namespace GeomAPI {
@@ -90,7 +90,7 @@ namespace Cromod {
                 /** @brief Method to get extrem coordinates of polygon
                  *  @return map of extrem coordinates
                  */
-                std::map<std::string,double> getBottom();
+                std::map<Bottom,double> getBottom();
                 
                 /** @brief Method to check if polygon is crossed
                  *  @return true if crossed

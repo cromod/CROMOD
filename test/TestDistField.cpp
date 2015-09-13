@@ -11,6 +11,7 @@
 #include <iostream>
 #include "DistField.hpp"
 #include "Exception.hpp"
+#include <SFML/System/Clock.hpp>
 
 using namespace Cromod::GeomAPI ;
 using namespace Cromod::FieldAPI ;
@@ -78,9 +79,13 @@ BOOST_AUTO_TEST_CASE( MethodTests )
     cout << "- initialize test" << endl;
     distfield.initialize();
     cout << "- compute test" << endl;
+    sf::Clock clock;
+    sf::Time time;
     distfield.compute();
+    time = clock.getElapsedTime();
+    cout << "  time elapsed = " << time.asSeconds() << endl;
     cout << "- interpolate test" << endl;
-    cout << "  distance = " << distfield.interpolate(75.,75.) << endl;
+    cout << "  distance = " << distfield.interpolate(0.,0.) << endl;
     
     cout << "<<< End of TestDistField >>>" << endl;
 }

@@ -188,7 +188,7 @@ Point Polygon::getOutside()
     return point;
 }
 
-map<string,double> Polygon::getBottom()
+map<Bottom,double> Polygon::getBottom()
 {
     unsigned int size = this->size();
     if ( size == 0 ) {
@@ -207,11 +207,11 @@ map<string,double> Polygon::getBottom()
         ymin = min(ymin,(*pt)[1]);
     }
 
-    map<string,double> coord;
-    coord["xmax"]=xmax;
-    coord["xmin"]=xmin;
-    coord["ymax"]=ymax;
-    coord["ymin"]=ymin;
+    map<Bottom,double> coord;
+    coord[XMAX]=xmax;
+    coord[XMIN]=xmin;
+    coord[YMAX]=ymax;
+    coord[YMIN]=ymin;
     return coord;
 }
 

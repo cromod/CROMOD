@@ -148,22 +148,22 @@ void Mesh::setInitGrid()
     if (this->size()>0) this->deleteAll();
     double step(this->getStep());
     // Recherche des coordonnees extremes
-    map<string,double> coord(polygon.getBottom());
+    map<Bottom,double> coord(polygon.getBottom());
     // Definition des vecteurs de la grille
-    int nx = static_cast<int>(floor(abs(coord["xmax"]-coord["xmin"])/step));
-    int ny = static_cast<int>(floor(abs(coord["ymax"]-coord["ymin"])/step));
+    int nx = static_cast<int>(floor(abs(coord[XMAX]-coord[XMIN])/step));
+    int ny = static_cast<int>(floor(abs(coord[YMAX]-coord[YMIN])/step));
     // Construction de la grille
     Point point(0.,2);
     for(int i=0; i<(ny+3); i++) { // Boucle sur les y
-        point[1] = coord["ymin"]+(i-1)*step;
+        point[1] = coord[YMIN]+(i-1)*step;
         for(int j=0; j<(nx+3); j++) { // Boucle sur les x
-            point[0] = coord["xmin"]+(j-1)*step;
+            point[0] = coord[XMIN]+(j-1)*step;
             Node node(point);
             this->addNode(node);
         }
     }
     // Test sur le point d'arrivee
-    if (abs(coord["xmax"]+step-point[0])>GEOM_TOLERANCE || abs(coord["ymax"]+step-point[1])>GEOM_TOLERANCE)
+    if (abs(coord[XMAX]+step-point[0])>GEOM_TOLERANCE || abs(coord[YMAX]+step-point[1])>GEOM_TOLERANCE)
         Exception::logWarning("Corrupted initial grid in Mesh::setInitGrid",
                                 __FILENAME__,__LINE__);
     this->setInit(true);

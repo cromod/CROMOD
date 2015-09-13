@@ -193,17 +193,17 @@ BOOST_AUTO_TEST_CASE( MethodTests )
     BOOST_REQUIRE_MESSAGE(pol.isInside(D),"Polygon::isInside failure");
     
     cout << "- Polygon::getBottom test" << endl;
-    map<string,double> bottom;
+    map<Bottom,double> bottom;
     try {
         bottom = pol.getBottom();
     }
     catch(...) {
         BOOST_FAIL("Polygon::getBottom failure");
     }
-    BOOST_REQUIRE_MESSAGE(bottom["xmax"]==2.,"Polygon::getBottom failure");
-    BOOST_REQUIRE_MESSAGE(bottom["ymax"]==2.,"Polygon::getBottom failure");
-    BOOST_REQUIRE_MESSAGE(bottom["xmin"]==-2.,"Polygon::getBottom failure");
-    BOOST_REQUIRE_MESSAGE(bottom["ymin"]==-2.,"Polygon::getBottom failure");
+    BOOST_REQUIRE_MESSAGE(bottom[XMAX]==2.,"Polygon::getBottom failure");
+    BOOST_REQUIRE_MESSAGE(bottom[YMAX]==2.,"Polygon::getBottom failure");
+    BOOST_REQUIRE_MESSAGE(bottom[XMIN]==-2.,"Polygon::getBottom failure");
+    BOOST_REQUIRE_MESSAGE(bottom[YMIN]==-2.,"Polygon::getBottom failure");
     
     cout << "<<< End of TestPolygon >>>" << endl;
 }

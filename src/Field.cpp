@@ -7,7 +7,6 @@
 
 #include "Field.hpp"
 #include "Exception.hpp"
-#include <iostream>
 
 using namespace Cromod::GeomAPI;
 using namespace Cromod::FieldAPI;
@@ -101,7 +100,17 @@ Vector Field::getValue(const Node &node)
     return (*this)[index];
 }
 
-map<string,Node> Field::getNodesAround(const Node &node)
+void Field::setValue(int index, const Vector &value)
+{
+    (*this)[index] = value;
+}
+
+Vector Field::getValue(int index)
+{
+    return (*this)[index];
+}
+
+map<Around,Node> Field::getNodesAround(const Node &node)
 {
     int index = mesh_.index(node);
     vector<int> dim = mesh_.getDim();
@@ -109,11 +118,26 @@ map<string,Node> Field::getNodesAround(const Node &node)
         throw(Exception("Impossible to use Field::getNodesAround (Node object not inside)"
                                 ,__FILENAME__,__LINE__)) ;
     
-    map<string,Node> around;
-    around["up"]    = mesh_[index+dim[0]];
-    around["down"]  = mesh_[index-dim[0]];
-    around["right"] = mesh_[index+1];
-    around["left"]  = mesh_[index-1];
+    map<Around,Node> around;
+    around[UP]    = mesh_[index+dim[0]];
+    around[DOWN]  = mesh_[index-dim[0]];
+    around[RIGHT] = mesh_[index+1];
+    around[LEFT]  = mesh_[index-1];
+    return around;
+}
+
+map<Around,int> Field::getNodesAround(int index)
+{
+    vector<int> dim = mesh_.getDim();
+    if (!mesh_[index].isInside())
+        throw(Exception("Impossible to use Field::getNodesAround (Node object not inside)"
+                                ,__FILENAME__,__LINE__)) ;
+    
+    map<Around,int> around;
+    around[UP]    = index+dim[0];
+    around[DOWN]  = index-dim[0];
+    around[RIGHT] = index+1;
+    around[LEFT]  = index-1;
     return around;
 }
 
@@ -141,9 +165,7 @@ double Field::bilinearInt(vector<Point> listPts, vector<double> listVal, Point p
       if( pol.isInside(point) )
       {
           double x = (point[0]-listPts[0][0])/(listPts[1][0]-listPts[0][0]);
-	  cout<< x << endl;
           double y = (point[1]-listPts[0][1])/(listPts[2][1]-listPts[0][1]);
-	  cout<< y << endl;
           double a00 = listVal[0];
           double a10 = listVal[1] - listVal[0];
           double a01 = listVal[3] - listVal[0];

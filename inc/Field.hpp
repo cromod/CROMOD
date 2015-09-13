@@ -9,6 +9,7 @@
 #define	FIELD_HPP
 
 #include "Mesh.hpp"
+#include "Constants.hpp"
 
 namespace Cromod {
     namespace FieldAPI {
@@ -71,17 +72,32 @@ namespace Cromod {
                  *  @param value value to set
                  */
                 void setValue(const GeomAPI::Node &node, const GeomAPI::Vector &value);
+                /** @brief Method to set value on a node
+                 *  @param index index of the chosen node
+                 *  @param value value to set
+                 */
+                void setValue(int index, const GeomAPI::Vector &value);
                 /** @brief Method to get value on a node
                  *  @param node the chosen node
                  *  @return value on the node
                  */
                 GeomAPI::Vector getValue(const GeomAPI::Node &node);
+                /** @brief Method to get value on a node
+                 *  @param index index of the chosen node
+                 *  @return value on the node
+                 */
+                GeomAPI::Vector getValue(int index);
 
                 /** @brief Method to get nodes around
                  *  @param node central node
                  *  @return map of nodes around
                  */
-                std::map<std::string,GeomAPI::Node> getNodesAround(const GeomAPI::Node &node);
+                std::map<Around,GeomAPI::Node> getNodesAround(const GeomAPI::Node &node);
+                /** @brief Method to get nodes around
+                 *  @param index index of central node
+                 *  @return map of nodes around
+                 */
+                std::map<Around,int> getNodesAround(int index);
                 
                 /** @brief Method to build with a mesh
                  *  @param mesh Mesh object
