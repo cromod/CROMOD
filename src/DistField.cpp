@@ -10,6 +10,7 @@
 #include "Constants.hpp"
 #include <cmath>
 #include <algorithm>
+#include <iostream>
 
 using namespace Cromod::GeomAPI;
 using namespace Cromod::FieldAPI;
@@ -30,13 +31,9 @@ DistField::DistField(const DistField& distfield)
         Exception::logWarning("DistField attributes are not consistent",__FILENAME__,__LINE__);
 }
 
-DistField::DistField(const Mesh& mesh): Field(mesh)
+DistField::DistField(const Mesh& mesh)
 {
-    mesh_ = mesh;
-    int size = mesh_.size();
-    vector<bool> status(2,false);
-    vector< vector<bool> > listStatus(size,status);
-    listStatus_ = listStatus;
+    this->build(mesh);
 }
 
 DistField::~DistField() {
@@ -98,27 +95,27 @@ void DistField::initialize()
     frozen[0] = true;
     vector<bool> narrow(unknown);
     narrow[1] = true;
-    
+
     for(int i=0; i<size; i++)
     {
         if (this->getStatus(mesh_[i])==frozen) 
         {
             map<string,Node> around = this->getNodesAround(mesh_[i]);
-            if (this->getStatus(around["haut"])==unknown and around["haut"].isInside()) {
-                this->setStatus(around["haut"],narrow);
-                this->setValue(around["haut"],step);
+            if (this->getStatus(around["up"])==unknown && around["up"].isInside()) {
+                this->setStatus(around["up"],narrow);
+                this->setValue(around["up"],step);
             }
-            if (this->getStatus(around["bas"])==unknown and around["bas"].isInside()) {
-                this->setStatus(around["bas"],narrow);
-                this->setValue(around["bas"],step);
+            if (this->getStatus(around["down"])==unknown && around["down"].isInside()) {
+                this->setStatus(around["down"],narrow);
+                this->setValue(around["down"],step);
             }
-            if (this->getStatus(around["droite"])==unknown and around["droite"].isInside()) {
-                this->setStatus(around["droite"],narrow);
-                this->setValue(around["droite"],step);
+            if (this->getStatus(around["right"])==unknown && around["right"].isInside()) {
+                this->setStatus(around["right"],narrow);
+                this->setValue(around["right"],step);
             }
-            if (this->getStatus(around["gauche"])==unknown and around["gauche"].isInside()) {
-                this->setStatus(around["gauche"],narrow);
-                this->setValue(around["gauche"],step);
+            if (this->getStatus(around["left"])==unknown && around["left"].isInside()) {
+                this->setStatus(around["left"],narrow);
+                this->setValue(around["left"],step);
             }
         }
         else if (this->getStatus(mesh_[i])==unknown) this->setValue(mesh_[i],inf);
@@ -138,12 +135,16 @@ void DistField::compute()
     frozen[0] = true;
     vector<bool> narrow(unknown);
     narrow[1] = true;
-
+    
+    Vector vect(0.,1);
+    vector<double> listVal;
+    vector<Node> listNode;
+    
     while(flag)
     {
-         vector<double> listVal;
-         vector<Node> listNode;
-
+         listVal.clear();
+         listNode.clear();
+    
          for(int i=0; i<size; i++)
          {
              if( this->getStatus(mesh_[i])==narrow )
@@ -156,11 +157,11 @@ void DistField::compute()
                  else dist = min(d1,d2) + step;
                  listVal.push_back(dist);
                  listNode.push_back(mesh_[i]);
-                 Vector vect(dist,1);
+                 vect[0] = dist;
                  this->setValue(mesh_[i],vect);
              }
          }
-
+         cout << listVal.size() << endl;
          if( !listVal.empty() )
          {
              min_val = *min_element(listVal.begin(),listVal.end());
@@ -201,12 +202,11 @@ double DistField::interpolate(double x, double y)
 
     if(polygon.isInside(point))
     {
-        Point pt_a(mesh[index].getPosition());
-        Segment seg(point,pt_a);
+        Segment seg(point,mesh[index].getPosition());
         if( seg.getLength() < step*sqrt(2.) )
         {
             vector<Point> listPts;
-            listPts.push_back(pt_a);
+            listPts.push_back(mesh[index].getPosition());
             listPts.push_back(mesh[index+1].getPosition());
             listPts.push_back(mesh[index+1+nx].getPosition());
             listPts.push_back(mesh[index+nx].getPosition());
@@ -218,6 +218,7 @@ double DistField::interpolate(double x, double y)
                 listVal.push_back(this->getValue(mesh[index+1])[0]); 
                 listVal.push_back(this->getValue(mesh[index+1+nx])[0]); 
                 listVal.push_back(this->getValue(mesh[index+nx])[0]); 
+		for(vector<double>::iterator l=listVal.begin(); l!=listVal.end(); ++l) cout << *l << endl;
                 double val = Field::bilinearInt(listPts,listVal,point);
                 if( val < 0. ) val = 0.;
                 return val;
