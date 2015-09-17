@@ -23,10 +23,6 @@ namespace Cromod {
                 Field();
                 /** @brief Copy constructor */
                 Field(const Field& field);
-                /** @brief Constructor
-                 *  @param mesh Mesh object
-                 */
-                Field(const GeomAPI::Mesh &mesh);
                 /** @brief Destructor */
                 virtual ~Field();
                 
@@ -45,23 +41,11 @@ namespace Cromod {
                  *  @return size
                  */
                 unsigned int size();
-                /** @brief Method to delete a field node */
-                void delValue();
-                /** @brief Method to delete every field node */
-                void deleteAll();
 
-                /** @brief Method to define mesh
-                 *  @param mesh Mesh object
-                 */
-                void setMesh(const GeomAPI::Mesh &mesh);
                 /** @brief Method to get mesh
                  *  @return Mesh object
                  */
                 GeomAPI::Mesh getMesh() const;
-                /** @brief Method to set step
-                 *  @param step mesh step
-                 */
-                void setStep(double step);
                 /** @brief Method to get step
                  *  @return mesh step
                  */
@@ -71,21 +55,19 @@ namespace Cromod {
                  *  @param value value to set
                  */
                 void setValue(const GeomAPI::Node &node, const GeomAPI::Vector &value);
-                /** @brief Method to set value on a node
-                 *  @param index index of the chosen node
-                 *  @param value value to set
-                 */
-                void setValue(int index, const GeomAPI::Vector &value);
                 /** @brief Method to get value on a node
                  *  @param node the chosen node
                  *  @return value on the node
                  */
                 GeomAPI::Vector getValue(const GeomAPI::Node &node);
-                /** @brief Method to get value on a node
-                 *  @param index index of the chosen node
-                 *  @return value on the node
+                /** @brief Method to know if field is computed
+                 *  @return true if computed
                  */
-                GeomAPI::Vector getValue(int index);
+                bool isComputed() const;
+                /** @brief Method to get list of value
+                 *  @return list of value
+                 */
+                std::vector<GeomAPI::Vector> getListValue() const;
 
                 /** @brief Method to get nodes around
                  *  @param node central node
@@ -100,8 +82,9 @@ namespace Cromod {
                 
                 /** @brief Method to build with a mesh
                  *  @param mesh Mesh object
+                 *  @param dim dimension of field value
                  */
-                virtual void build(const GeomAPI::Mesh &mesh);
+                virtual void build(const GeomAPI::Mesh &mesh, int dim);
 
                 /** @brief Function to compute relative error
                  *  @param val1 first value
@@ -125,6 +108,8 @@ namespace Cromod {
                 GeomAPI::Mesh mesh_; 
                 /** @brief List of field nodes */  
                 std::vector<GeomAPI::Vector> listValue_;
+                /** @brief computed field */  
+                bool computed_;
         };
     }
 }

@@ -25,8 +25,9 @@ namespace Cromod {
                 DistField(const DistField& distfield);
                 /** @brief Constructor
                  *  @param mesh Mesh object
+                 *  @param listExit list of exit segment
                  */
-                DistField(const GeomAPI::Mesh &mesh);
+                DistField(const GeomAPI::Mesh &mesh, std::vector<GeomAPI::Segment> &listExit);
                 /** @brief Destructor */
                 virtual ~DistField();
 
@@ -55,12 +56,10 @@ namespace Cromod {
                  *  @param mesh Mesh object
                  */
                 void setBoundaryCondition(GeomAPI::Segment &segment);
-
                 /** @brief Method to build with a mesh
                  *  @param mesh Mesh object
                  */
                 void build(const GeomAPI::Mesh &mesh);
-
                 /** @brief Method to initialize field of distance */
                 void initialize();
                 /** @brief Method to compute field of distance 

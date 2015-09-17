@@ -1,6 +1,6 @@
 /** 
- * @file TestDistField.cpp
- * @brief Unit test of DistField class
+ * @file TestField.cpp
+ * @brief Unit test of Field class
  * @author cromod
  * @date september 2015
  */
@@ -38,15 +38,6 @@ BOOST_AUTO_TEST_CASE( BasicTests )
     catch(...) {
         BOOST_FAIL("Copy constructor failure");
     }
-    
-    cout << "- Constructor test" << endl;
-    Mesh mesh;
-    try { 
-        DistField new_distfield(mesh);
-    }
-    catch(...) {
-        BOOST_FAIL("Constructor failure");
-    }
 
 }
 
@@ -72,20 +63,20 @@ BOOST_AUTO_TEST_CASE( MethodTests )
     Point pointA(ptA,2);
     Point pointB(ptB,2);
     Segment segment(pointA,pointB);
-    
-    DistField distfield(mesh);
-    cout << "- setBoundaryCondition test" << endl;
-    distfield.setBoundaryCondition(segment);
-    cout << "- initialize test" << endl;
-    distfield.initialize();
-    cout << "- compute test" << endl;
+    vector<Segment> listExit;
+    listExit.push_back(segment);
+
+    cout << "- Test of DistField constructor" << endl;
     sf::Clock clock;
     sf::Time time;
-    distfield.compute();
+    DistField distfield(mesh,listExit);
     time = clock.getElapsedTime();
     cout << "  time elapsed = " << time.asSeconds() << endl;
     cout << "- interpolate test" << endl;
-    cout << "  distance = " << distfield.interpolate(0.,0.) << endl;
+    Point pointO(0.,2);
+    Segment seg(pointO,pointB);
+    cout << "  interpolated distance = " << distfield.interpolate(0.,0.) << endl;
+    cout << "  real distance = " << seg.getLength() << endl;
     
-    cout << "<<< End of TestDistField >>>" << endl;
+    cout << "<<< End of TestField >>>" << endl;
 }

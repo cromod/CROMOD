@@ -14,7 +14,8 @@ using namespace Cromod::Tools;
 using namespace std;
 
 Field::Field() : mesh_(),
-                 listValue_()
+                 listValue_(),
+                 computed_(false)
 {
 }
 
@@ -22,13 +23,9 @@ Field::Field(const Field& field)
 {
     mesh_ = field.mesh_;
     listValue_ = field.listValue_;
+    computed_ = field.computed_;
     if (mesh_.size() != listValue_.size())
         Exception::logWarning("Field argument of Field::Field is not consistent",__FILENAME__,__LINE__);
-}
-
-Field::Field(const Mesh& mesh)
-{
-    this->build(mesh);
 }
 
 Field::~Field() {
@@ -45,6 +42,7 @@ Field& Field::operator=(const Field &field)
 {
     mesh_ = field.mesh_;
     listValue_ = field.listValue_;
+    computed_ = field.computed_;
 }
 
 unsigned int Field::size()
@@ -52,35 +50,9 @@ unsigned int Field::size()
     return listValue_.size();
 }
 
-void Field::delValue()
-{
-    if (this->size()>0) listValue_.pop_back();
-    else throw(Exception("Nothing to delete with Field::delFNode"
-                                ,__FILENAME__,__LINE__)) ;
-}
-
-void Field::deleteAll()
-{
-    if (this->size()==0) throw(Exception("Nothing to delete with Field::deleteAll"
-                                ,__FILENAME__,__LINE__)) ;
-    while (this->size()>0) this->delValue();
-}
-
-void Field::setMesh(const Mesh &mesh)
-{
-    mesh_ = mesh;
-}
-
 Mesh Field::getMesh() const
 {
     return mesh_;
-}
-
-void Field::setStep(double step)
-{
-    Mesh mesh(this->getMesh());
-    mesh.setStep(step);
-    this->setMesh(mesh);
 }
 
 double Field::getStep() const
@@ -100,14 +72,14 @@ Vector Field::getValue(const Node &node)
     return (*this)[index];
 }
 
-void Field::setValue(int index, const Vector &value)
+bool Field::isComputed() const
 {
-    (*this)[index] = value;
+    return computed_;
 }
 
-Vector Field::getValue(int index)
+vector<Vector> Field::getListValue() const
 {
-    return (*this)[index];
+    return listValue_;
 }
 
 map<Around,Node> Field::getNodesAround(const Node &node)
@@ -141,15 +113,16 @@ map<Around,int> Field::getNodesAround(int index)
     return around;
 }
 
-void Field::build(const Mesh &mesh)
+void Field::build(const Mesh &mesh, int dim)
 {
     if ( !(mesh.isInit() && mesh.isDetect()) )
         Exception::logWarning("Mesh argument of Field::build is not complete",__FILENAME__,__LINE__);
     mesh_ = mesh;
     int size = mesh_.size();
-    Vector inf(INFINITY,1);
+    Vector inf(INFINITY,dim);
     vector<Vector> listValue(size,inf);
     listValue_ = listValue;
+    computed_ = false;
 }
 
 double Field::computeRelErr(double val1, double val2)
