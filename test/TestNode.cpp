@@ -18,8 +18,6 @@ using namespace std ;
 
 BOOST_AUTO_TEST_CASE( BasicTests ) 
 {    
-    cout << "<<< Starting TestNode >>>" << endl;
-    
     cout << "- Default constructor test" << endl;
     try { 
         Node node;
@@ -98,6 +96,4 @@ BOOST_AUTO_TEST_CASE( BasicTests )
 
     cout << "- Node::isInside test" << endl;
     BOOST_REQUIRE_MESSAGE(node2.isInside(),"Node::isInside failure");
-    
-    cout << "<<< End of TestNode >>>" << endl;
 }

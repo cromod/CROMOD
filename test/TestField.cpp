@@ -9,7 +9,7 @@
 #define BOOST_TEST_MODULE TestDistField
 #include <boost/test/unit_test.hpp>
 #include <iostream>
-#include "DistField.hpp"
+#include "GradField.hpp"
 #include "Exception.hpp"
 #include <SFML/System/Clock.hpp>
 
@@ -20,8 +20,6 @@ using namespace std ;
 
 BOOST_AUTO_TEST_CASE( BasicTests ) 
 {
-    cout << "<<< Starting TestDistField >>>" << endl;
-    
     cout << "- Default constructor test" << endl;
     try { 
         DistField distfield;
@@ -38,7 +36,6 @@ BOOST_AUTO_TEST_CASE( BasicTests )
     catch(...) {
         BOOST_FAIL("Copy constructor failure");
     }
-
 }
 
 BOOST_AUTO_TEST_CASE( MethodTests )
@@ -72,11 +69,18 @@ BOOST_AUTO_TEST_CASE( MethodTests )
     DistField distfield(mesh,listExit);
     time = clock.getElapsedTime();
     cout << "  time elapsed = " << time.asSeconds() << endl;
-    cout << "- interpolate test" << endl;
+    cout << "- DistField::interpolate test" << endl;
     Point pointO(0.,2);
     Segment seg(pointO,pointB);
     cout << "  interpolated distance = " << distfield.interpolate(0.,0.) << endl;
     cout << "  real distance = " << seg.getLength() << endl;
-    
-    cout << "<<< End of TestField >>>" << endl;
+
+    cout << "- Test of GradField constructor" << endl;
+    clock.restart();
+    GradField gradfield(distfield);
+    time = clock.getElapsedTime();
+    cout << "  time elapsed = " << time.asSeconds() << endl;
+    cout << "- GradField::interpolate test" << endl;
+    cout << "  interpolated gradient = " << gradfield.interpolate(0.,0.)[0] 
+               << " , " << gradfield.interpolate(0.,0.)[1] << endl;
 }

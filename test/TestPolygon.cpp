@@ -18,8 +18,6 @@ using namespace std ;
 
 BOOST_AUTO_TEST_CASE( BasicTests ) 
 {    
-    cout << "<<< Starting TestPolygon >>>" << endl;
-    
     cout << "- Default constructor test" << endl;
     try { 
         Polygon polygon;
@@ -204,6 +202,4 @@ BOOST_AUTO_TEST_CASE( MethodTests )
     BOOST_REQUIRE_MESSAGE(bottom[YMAX]==2.,"Polygon::getBottom failure");
     BOOST_REQUIRE_MESSAGE(bottom[XMIN]==-2.,"Polygon::getBottom failure");
     BOOST_REQUIRE_MESSAGE(bottom[YMIN]==-2.,"Polygon::getBottom failure");
-    
-    cout << "<<< End of TestPolygon >>>" << endl;
 }

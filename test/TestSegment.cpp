@@ -20,8 +20,6 @@ using namespace std ;
 
 BOOST_AUTO_TEST_CASE( BasicTests ) 
 {    
-    cout << "<<< Starting TestSegment >>>" << endl;
-    
     cout << "- Default constructor test" << endl;
     try { 
         Segment seg;
@@ -169,6 +167,4 @@ BOOST_AUTO_TEST_CASE( MethodTests )
     double val = seg2.getLength();
     BOOST_REQUIRE_MESSAGE(seg.getMinDist(point3)==val,
                             "Segment::getMinDist failure");
-    
-    cout << "<<< End of TestSegment >>>" << endl;
 }

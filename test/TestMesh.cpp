@@ -21,8 +21,6 @@ using namespace std ;
 
 BOOST_AUTO_TEST_CASE( BasicTests ) 
 {
-    cout << "<<< Starting TestMesh >>>" << endl;
-    
     cout << "- Default constructor test" << endl;
     try { 
         Mesh mesh;
@@ -216,5 +214,4 @@ BOOST_AUTO_TEST_CASE( MethodTests )
         window.display();
         time = clock.getElapsedTime();
     }
-    cout << "<<< End of TestMesh >>>" << endl;
 }

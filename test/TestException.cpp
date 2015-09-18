@@ -25,11 +25,6 @@ string testException()
 
 BOOST_AUTO_TEST_CASE( TestException ) 
 {
-    cout << "<<< Starting TestException >>>" << endl;
-    
     cout << "Unit test on class Exception..." << endl;
     BOOST_CHECK( testException() == "Error (Machin.cpp:1237) : Coucou !" );
-    
-    cout << "<<< End of TestException >>>" << endl;
-
 }
