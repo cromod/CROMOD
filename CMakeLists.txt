@@ -2,6 +2,10 @@
 cmake_minimum_required(VERSION 2.8)
 project (CROMOD)
 
+# Flags for gcov
+SET(CMAKE_CXX_FLAGS "-g -O0 -Wall -fprofile-arcs -ftest-coverage")
+SET(CMAKE_EXE_LINKER_FLAGS "-lgcov")
+
 # Add a macro __FILENAME__ to get file name without path
 set(FILENAME_FLAGS "-D__FILENAME__='\"$(subst ${CMAKE_SOURCE_DIR}/,,$(abspath $<))\"'")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${FILENAME_FLAGS}")
@@ -10,6 +14,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${FILENAME_FLAGS}")
 set (CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/config" ${CMAKE_MODULE_PATH})
 include (FindLibraries)
 include (MakeDoc)
+include (MakeCoverage)
 
 # List of include files
 include_directories (${PROJECT_SOURCE_DIR}/inc)
