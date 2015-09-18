@@ -21,8 +21,6 @@ namespace Cromod {
                 
                 /** @brief Default constructor */
                 Field();
-                /** @brief Copy constructor */
-                Field(const Field& field);
                 /** @brief Destructor */
                 virtual ~Field();
                 
@@ -31,11 +29,6 @@ namespace Cromod {
                  *  @return value on the pointed node
                  */
                 GeomAPI::Vector& operator[](const unsigned int& i);
-                /** @brief Assignment operator
-                 *  @param field Field object
-                 *  @return Field object
-                 */
-                Field& operator=(const Field &field);
                 
                 /** @brief Method to get size
                  *  @return size

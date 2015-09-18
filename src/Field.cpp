@@ -19,15 +19,6 @@ Field::Field() : mesh_(),
 {
 }
 
-Field::Field(const Field& field) 
-{
-    mesh_ = field.mesh_;
-    listValue_ = field.listValue_;
-    computed_ = field.computed_;
-    if (mesh_.size() != listValue_.size())
-        Exception::logWarning("Field argument of Field::Field is not consistent",__FILENAME__,__LINE__);
-}
-
 Field::~Field() {
 }
 
@@ -36,13 +27,6 @@ Vector& Field::operator[](const unsigned int& i)
     if (this->size()>0) return listValue_[i];
     else throw(Exception("Nothing to get with Field::operator[]"
                                  ,__FILENAME__,__LINE__)) ;
-}
-
-Field& Field::operator=(const Field &field)
-{
-    mesh_ = field.mesh_;
-    listValue_ = field.listValue_;
-    computed_ = field.computed_;
 }
 
 unsigned int Field::size()
