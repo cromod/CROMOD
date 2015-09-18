@@ -33,7 +33,7 @@ GradField::GradField(const DistField& distfield)
     this->compute(distfield.getListValue());
 }
 
-DistField::~DistField() {
+GradField::~GradField() {
 }
 
 void GradField::compute(const vector<Vector>& listValue)
