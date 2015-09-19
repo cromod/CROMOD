@@ -55,6 +55,7 @@ Segment& Segment::operator=(const Segment &seg)
     point1_ = seg.point1_ ;
     point2_ = seg.point2_ ;
     exit_ = seg.exit_ ;
+    return *this;
 }
 
 void Segment::setExit(bool exit)

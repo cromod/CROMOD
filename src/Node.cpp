@@ -56,6 +56,7 @@ Node& Node::operator=(const Node &node)
     point_ = node.point_;
     near_ = node.near_;
     inside_ = node.inside_;
+    return *this;
 }
 
 void Node::setPosition(const Point &point)

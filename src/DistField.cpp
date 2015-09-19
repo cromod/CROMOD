@@ -34,7 +34,7 @@ DistField::DistField(const Mesh& mesh, vector<Segment> &listExit)
 {
     this->build(mesh);
     if(!listExit.empty()) {
-        for(int i=0; i<listExit.size(); i++)
+        for(unsigned int i=0; i<listExit.size(); i++)
             this->setBoundaryCondition(listExit[i]);
     }
     else throw(Exception("No boundary condition in DistField::DistField",__FILENAME__,__LINE__)) ;
@@ -164,7 +164,7 @@ void DistField::compute()
          if( !listVal.empty() )
          {
              min_val = *min_element(listVal.begin(),listVal.end());
-             for(int i=0; i<listVal.size(); i++)
+             for(unsigned int i=0; i<listVal.size(); i++)
              {
                  if( Field::computeRelErr(listVal[i],min_val) < VAL_TOLERANCE )
                  {  

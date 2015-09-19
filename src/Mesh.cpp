@@ -136,7 +136,8 @@ std::vector<int> Mesh::getDim() const
 
 void Mesh::setDim(std::vector<int> dim)
 {
-    if (dim[0]*dim[1]==this->size()) dim_ = dim ;
+    int size = static_cast<int>(this->size());
+    if (dim[0]*dim[1]==size) dim_ = dim ;
     else Exception::logWarning("Argument does not suit in Mesh::setDim",
                                 __FILENAME__,__LINE__) ;
 }

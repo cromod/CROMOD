@@ -31,7 +31,7 @@ Polygon::Polygon(const vector<Point>& listPoints)
     Segment segment;
     
     if (size > 0) {
-        for(int i=0; i<size; i++) {
+        for(unsigned int i=0; i<size; i++) {
             if (i < size-1) segment.setPoints(listPoints[i],listPoints[i+1]);
             else if (i == size-1) segment.setPoints(listPoints[i],(*this)[0].getOne());
             if (segment.isSegment()) this->addSegment(segment);
@@ -55,6 +55,7 @@ Segment& Polygon::operator[](const unsigned int& i)
 Polygon& Polygon::operator=(const Polygon &polygon)
 {
     listSeg_ = polygon.listSeg_ ;
+    return *this;
 }
 
 unsigned int Polygon::size() const
@@ -143,7 +144,7 @@ bool Polygon::isClosed()
     
     if (pol[size-1].getTwo()!=pol[0].getOne()) return false;
     
-    for(int i=0 ; i<(size-1) ; i++) {
+    for(unsigned int i=0 ; i<(size-1) ; i++) {
         if (pol[i].getTwo()!=pol[i+1].getOne()) return false;
     }
 
@@ -167,7 +168,7 @@ vector<Point> Polygon::getPoints()
     unsigned int size = this->size();
     vector<Point> listPoints;
     
-    for(int i=0; i<size; i++) {
+    for(unsigned int i=0; i<size; i++) {
         listPoints.push_back((*this)[i].getOne());
     }
 
@@ -228,9 +229,9 @@ bool Polygon::isSelfIntersect()
                                 ,__FILENAME__,__LINE__)) ;
     }
     
-    for(int i=0; i<size; i++) {
+    for(unsigned int i=0; i<size; i++) {
         list<int> listIndex;
-        for(int j=0; j<size; j++) listIndex.push_back(j);
+        for(unsigned int j=0; j<size; j++) listIndex.push_back(j);
         listIndex.remove(i);
         
         if (i>0 && i<(size-1)) {
@@ -262,7 +263,7 @@ int Polygon::getNbIntersect(const Segment& segment)
     bool intersect;
     bool intersect_next;
     
-    for(int i=0; i<size; i++) {
+    for(unsigned int i=0; i<size; i++) {
         intersect = pol[i].checkIntersect(segment) && !(pol[i].checkParallel(segment));
         if (i<size-1) {
             intersect_next = pol[i+1].checkIntersect(segment) && !(pol[i+1].checkParallel(segment));
@@ -282,7 +283,7 @@ bool Polygon::isOnEdge(const Point& point)
     Polygon pol(*this);
     unsigned int size = pol.size();
     
-    for(int i=0; i<size; i++) {
+    for(unsigned int i=0; i<size; i++) {
         if ( pol[i].checkInclude(point) ) return true;
     }
     

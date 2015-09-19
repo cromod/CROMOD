@@ -195,7 +195,7 @@ BOOST_AUTO_TEST_CASE( MethodTests )
         // fenetre en blanc
         window.clear(sf::Color::White);
         // trace du maillage
-        for(int i=0; i<mesh.size(); i++) {
+        for(unsigned int i=0; i<mesh.size(); i++) {
             Point point(mesh[i].getPosition());
             sf::CircleShape c_in(4);
             c_in.setOrigin(4.,4.);

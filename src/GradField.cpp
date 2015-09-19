@@ -46,7 +46,7 @@ void GradField::compute(const vector<Vector>& listValue)
     bool flag(true);
     double step = this->getStep();
     
-    for(int i=0; i<this->size(); i++)
+    for(unsigned int i=0; i<this->size(); i++)
     {
         if(mesh_[i].isInside())
         {

@@ -30,7 +30,7 @@ bool Vector::operator==(const Vector& vec) const
 {
     if (this->size()!=vec.size()) return false;
     bool val(true);
-    for(int i=0;i<vec.size();i++) val&=((*this)[i]==vec[i]);
+    for(unsigned int i=0;i<vec.size();i++) val&=((*this)[i]==vec[i]);
     return val;    
 }
 
