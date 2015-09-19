@@ -13,7 +13,7 @@
 namespace Cromod {
     namespace FieldAPI {
         /** @class Field Field.hpp
-         *  @brief Class to define a field
+         *  @brief Abstract class to define a field
          */
         class Field {
             
@@ -78,6 +78,12 @@ namespace Cromod {
                  *  @param dim dimension of field value
                  */
                 virtual void build(const GeomAPI::Mesh &mesh, int dim);
+                /** @brief Method to interpolate field of gradient
+                 *  @param x x coordinate
+                 *  @param y y coordinate
+                 *  @return value at (x,y)
+                 */
+                virtual GeomAPI::Vector interpolate(double x, double y) = 0;
 
                 /** @brief Function to compute relative error
                  *  @param val1 first value
@@ -92,8 +98,14 @@ namespace Cromod {
                  *  @param point point to interpolate
                  *  @return interpolated value
                  */
-                static double bilinearInt(std::vector<GeomAPI::Point> listPts, 
-                                          std::vector<double> listVal, GeomAPI::Point point);
+                static GeomAPI::Vector bilinearInt(std::vector<GeomAPI::Point> listPts, 
+                                                   std::vector<GeomAPI::Vector> listVal,
+                                                   GeomAPI::Point point);
+                /** @brief Function to renormalize vector
+                 *  @param vec vector
+                 *  @return renormalized vector
+                 */
+                static GeomAPI::Vector renorm(GeomAPI::Vector vec);
 
             protected:
                 

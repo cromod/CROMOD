@@ -187,7 +187,7 @@ void DistField::compute()
     computed_ = true;
 }
 
-double DistField::interpolate(double x, double y)
+Vector DistField::interpolate(double x, double y)
 {
     if (!this->isComputed())
         throw(Exception("Impossible to use DistField::interpolate",__FILENAME__,__LINE__)) ;
@@ -202,6 +202,8 @@ double DistField::interpolate(double x, double y)
     int index = static_cast<int>((x-coord[XMIN])/step+1.)
                   + static_cast<int>((y-coord[YMIN])/step+1.)*nx;
 
+    Vector val(INFINITY,1);
+
     if(polygon.isInside(point))
     {
         Segment seg(point,mesh_[index].getPosition());
@@ -215,18 +217,18 @@ double DistField::interpolate(double x, double y)
             Polygon square(listPts);
             if(square.isInside(point))
             {
-                vector<double> listVal;  
-                listVal.push_back((*this)[index][0]); 
-                listVal.push_back((*this)[index+1][0]); 
-                listVal.push_back((*this)[index+1+nx][0]); 
-                listVal.push_back((*this)[index+nx][0]); 
-                double val = Field::bilinearInt(listPts,listVal,point);
-                if( val < 0. ) val = 0.;
+                vector<Vector> listVal;  
+                listVal.push_back((*this)[index]); 
+                listVal.push_back((*this)[index+1]); 
+                listVal.push_back((*this)[index+1+nx]); 
+                listVal.push_back((*this)[index+nx]); 
+                val = Field::bilinearInt(listPts,listVal,point);
+                if( val[0] < 0. ) val[0] = 0.;
                 return val;
             }
-            else return INFINITY;
+            else return val;
         }
-        else return INFINITY;
+        else return val;
     }
-    else return INFINITY;
+    else return val;
 }

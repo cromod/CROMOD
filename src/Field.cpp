@@ -7,6 +7,7 @@
 
 #include "Field.hpp"
 #include "Exception.hpp"
+#include <cmath>
 
 using namespace Cromod::GeomAPI;
 using namespace Cromod::FieldAPI;
@@ -116,19 +117,34 @@ double Field::computeRelErr(double val1, double val2)
     else return 0.;
 }
 
-double Field::bilinearInt(vector<Point> listPts, vector<double> listVal, Point point)
+Vector Field::bilinearInt(vector<Point> listPts, vector<Vector> listVal, Point point)
 {
       Polygon pol(listPts);
       if( pol.isInside(point) )
       {
           double x = (point[0]-listPts[0][0])/(listPts[1][0]-listPts[0][0]);
           double y = (point[1]-listPts[0][1])/(listPts[2][1]-listPts[0][1]);
-          double a00 = listVal[0];
-          double a10 = listVal[1] - listVal[0];
-          double a01 = listVal[3] - listVal[0];
-          double a11 = listVal[2] - listVal[0] - (listVal[3] - listVal[1]);
-          return a00 + a10*x + a01*y + a11*x*y;
+          Vector a00, a10, a01, a11, val;
+          a00 = listVal[0];
+          a10 = listVal[1]; a10 -= listVal[0];
+          a10 *= x;
+          a01 = listVal[3]; a01 -= listVal[0];
+          a01 *= y;
+          a11 = listVal[2]; a11 -= listVal[0]; a11 -= listVal[3]; a11 += listVal[1];
+          a11 *= x*y;
+	  val = a00; val += a10; val += a01; val += a11;
+          return val;
       }
       else throw(Exception("Impossible to use Field::BilinearInt (point outside area)"
                                    ,__FILENAME__,__LINE__)) ;
+}
+
+Vector Field::renorm(Vector vec)
+{
+    double norm = 0.;
+    for(unsigned int i=0; i<vec.size(); i++) norm += pow(vec[i],2.);
+    norm = sqrt(norm);
+    if( norm > VAL_TOLERANCE ) vec /= norm;
+    else vec *= 0.;
+    return vec;
 }

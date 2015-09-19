@@ -124,20 +124,13 @@ Vector GradField::interpolate(double x, double y)
             Polygon square(listPts);
             if(square.isInside(point))
             {
-                vector<double> listValx;  
-                listValx.push_back((*this)[index][0]); 
-                listValx.push_back((*this)[index+1][0]); 
-                listValx.push_back((*this)[index+1+nx][0]); 
-                listValx.push_back((*this)[index+nx][0]);
-
-                vector<double> listValy;  
-                listValy.push_back((*this)[index][1]); 
-                listValy.push_back((*this)[index+1][1]); 
-                listValy.push_back((*this)[index+1+nx][1]); 
-                listValy.push_back((*this)[index+nx][1]); 
-
-                val[0] = Field::bilinearInt(listPts,listValx,point);
-                val[1] = Field::bilinearInt(listPts,listValy,point);
+                vector<Vector> listVal;  
+                listVal.push_back((*this)[index]); 
+                listVal.push_back((*this)[index+1]); 
+                listVal.push_back((*this)[index+1+nx]); 
+                listVal.push_back((*this)[index+nx]); 
+                val = Field::bilinearInt(listPts,listVal,point);
+                val = Field::renorm(val);
                 return val;
             }
             else return val;

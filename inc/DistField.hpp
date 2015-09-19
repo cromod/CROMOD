@@ -6,7 +6,7 @@
  */
 
 #ifndef DISTFIELD_HPP
-#define	DISTFIELD_HPP
+#define DISTFIELD_HPP
 
 #include "Field.hpp"
 
@@ -71,7 +71,7 @@ namespace Cromod {
                  *  @param y y coordinate
                  *  @return value at (x,y)
                  */
-                double interpolate(double x, double y);
+                GeomAPI::Vector interpolate(double x, double y);
 
             private:
                 
