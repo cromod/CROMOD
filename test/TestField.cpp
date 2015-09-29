@@ -65,22 +65,30 @@ BOOST_AUTO_TEST_CASE( MethodTests )
 
     cout << "- Test of DistField constructor" << endl;
     sf::Clock clock;
-    sf::Time time;
+    sf::Time time; 
     DistField distfield(mesh,listExit);
     time = clock.getElapsedTime();
     cout << "  time elapsed = " << time.asSeconds() << endl;
+    
     cout << "- DistField::interpolate test" << endl;
     Point pointO(0.,2);
     Segment seg(pointO,pointB);
-    cout << "  interpolated distance = " << distfield.interpolate(0.,0.) << endl;
+    double dist = distfield.interpolate(0.,0.)[0];
+    cout << "  interpolated distance = " << dist << endl;
     cout << "  real distance = " << seg.getLength() << endl;
-
+    BOOST_REQUIRE_MESSAGE(Field::computeRelErr(dist,seg.getLength())<1.e-2,"Bad value of DistField::interpolate");
+    
     cout << "- Test of GradField constructor" << endl;
     clock.restart();
     GradField gradfield(distfield);
     time = clock.getElapsedTime();
     cout << "  time elapsed = " << time.asSeconds() << endl;
+    
     cout << "- GradField::interpolate test" << endl;
-    cout << "  interpolated gradient = " << gradfield.interpolate(0.,0.)[0] 
-               << " , " << gradfield.interpolate(0.,0.)[1] << endl;
+    Vector vec = gradfield.interpolate(0.,0.);
+    cout << "  interpolated gradient = " << vec[0] << " , " << vec[1] << endl;
+    double norm = sqrt(pow(vec[0],2.)+pow(vec[1],2.));
+    cout << "  norm = " << norm << endl;
+    BOOST_REQUIRE_MESSAGE(Field::computeRelErr(norm,1.)<VAL_TOLERANCE,"Bad value of GradField::interpolate");
+
 }

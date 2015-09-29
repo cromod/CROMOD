@@ -27,3 +27,43 @@ if(SFML_FOUND)
   set (EXT_LIBRARIES ${SFML_LIBRARIES} ${EXT_LIBRARIES})
   
 endif()
+
+
+# GLUT library
+find_package(GLUT REQUIRED)
+
+if(GLUT_FOUND)
+
+  message(STATUS "GLUT_INCLUDE_DIR = " ${GLUT_INCLUDE_DIR})
+  include_directories(${GLUT_INCLUDE_DIR})
+  
+  message (STATUS "GLUT_LIBRARIES = " ${GLUT_LIBRARIES})
+  set (EXT_LIBRARIES ${GLUT_LIBRARIES} ${EXT_LIBRARIES})
+  
+endif()
+
+# OpenGL library
+find_package(OpenGL REQUIRED)
+
+if(OPENGL_FOUND)
+
+  message(STATUS "OPENGL_INCLUDE_DIR = " ${OPENGL_INCLUDE_DIR})
+  include_directories(${OPENGL_INCLUDE_DIR})
+  
+  message (STATUS "OPENGL_LIBRARIES = " ${OPENGL_LIBRARIES})
+  set (EXT_LIBRARIES ${OPENGL_LIBRARIES} ${EXT_LIBRARIES})
+
+endif()
+
+# MathGL library
+find_package(MathGL2 REQUIRED GLUT)
+
+if(MATHGL2_FOUND)
+
+  message(STATUS "MATHGL2_INCLUDE_DIRS = " ${MATHGL2_INCLUDE_DIRS})
+  include_directories(${MATHGL2_INCLUDE_DIRS})
+  
+  message (STATUS "MATHGL2_LIBRARIES = " ${MATHGL2_LIBRARIES})
+  set (EXT_LIBRARIES ${MATHGL2_LIBRARIES} ${EXT_LIBRARIES})
+
+endif()

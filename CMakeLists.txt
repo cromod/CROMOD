@@ -12,6 +12,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${FILENAME_FLAGS}")
 
 # Launch modules
 set (CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/config" ${CMAKE_MODULE_PATH})
+message(STATUS "CMAKE_MODULE_PATH = " ${CMAKE_MODULE_PATH})
 include (FindLibraries)
 include (MakeDoc)
 include (MakeCoverage)
