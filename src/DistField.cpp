@@ -9,6 +9,7 @@
 #include "Exception.hpp"
 #include <cmath>
 #include <algorithm>
+#include <iostream>
 
 using namespace Cromod::GeomAPI;
 using namespace Cromod::FieldAPI;
@@ -38,8 +39,11 @@ DistField::DistField(const Mesh& mesh, vector<Segment> &listExit)
             this->setBoundaryCondition(listExit[i]);
     }
     else throw(Exception("No boundary condition in DistField::DistField",__FILENAME__,__LINE__)) ;
+    //cout << "Initializing field of distance..." << endl;
     this->initialize();
+    //cout << "Computing field of distance..." << endl;
     this->compute();
+    //cout << "Field of distance built" << endl;
 }
 
 DistField::~DistField() {
@@ -102,7 +106,7 @@ void DistField::initialize()
     int size = mesh_.size();
     
     Vector step(this->getStep(),1); // step value
-    Vector inf(INFINITY,1); // infinity value
+    Vector inf(VAL_INFINITY,1); // infinity value
 
     for(int i=0; i<size; i++)
     {
@@ -202,7 +206,7 @@ Vector DistField::interpolate(double x, double y)
     int index = static_cast<int>((x-coord[XMIN])/step+1.)
                   + static_cast<int>((y-coord[YMIN])/step+1.)*nx;
 
-    Vector val(INFINITY,1);
+    Vector val(VAL_INFINITY,1);
 
     if(polygon.isInside(point))
     {
@@ -210,25 +214,69 @@ Vector DistField::interpolate(double x, double y)
         if( seg.getLength() < step*sqrt(2.) )
         {
             vector<Point> listPts;
-            listPts.push_back(mesh_[index].getPosition());
-            listPts.push_back(mesh_[index+1].getPosition());
-            listPts.push_back(mesh_[index+1+nx].getPosition());
-            listPts.push_back(mesh_[index+nx].getPosition());
-            Polygon square(listPts);
-            if(square.isInside(point))
+            vector<Vector> listVal;
+            if(polygon.isInside(mesh_[index].getPosition()))
             {
-                vector<Vector> listVal;  
-                listVal.push_back((*this)[index]); 
-                listVal.push_back((*this)[index+1]); 
-                listVal.push_back((*this)[index+1+nx]); 
-                listVal.push_back((*this)[index+nx]); 
-                val = Field::bilinearInt(listPts,listVal,point);
-                if( val[0] < 0. ) val[0] = 0.;
-                return val;
+                listPts.push_back(mesh_[index].getPosition());
+                listVal.push_back((*this)[index]);
             }
-            else return val;
+            if(polygon.isInside(mesh_[index+1].getPosition()))
+            {
+                listPts.push_back(mesh_[index+1].getPosition());
+                listVal.push_back((*this)[index+1]);
+            }
+            if(polygon.isInside(mesh_[index+1+nx].getPosition()))
+            {
+                listPts.push_back(mesh_[index+1+nx].getPosition());
+                listVal.push_back((*this)[index+1+nx]);
+            }
+            if(polygon.isInside(mesh_[index+nx].getPosition()))
+            {
+                listPts.push_back(mesh_[index+nx].getPosition());
+                listVal.push_back((*this)[index+nx]);
+            }
+
+            Polygon element(listPts);
+            if(listPts.size() == 4 && element.isInside(point)) val = Field::bilinearInt(listPts,listVal,point);
+            else if(listPts.size() == 3 && element.isInside(point)) val = Field::linear3DInt(listPts,listVal,point);
+            else
+            {
+                if(listPts.size() == 3)
+                {
+                    vector<Segment> listSeg = element.getList();
+                    int it(0);
+                    Segment segment;
+                    for(int i=0; i<3; i++) 
+                    {
+                        if(abs(listSeg[i].getLength()-step*sqrt(2.))<GEOM_TOLERANCE)
+                        {
+                            it = (i+2)%3;
+                            segment = listSeg[i];
+                        }
+                    }
+                    listPts.erase(listPts.begin()+it);
+                    listVal.erase(listVal.begin()+it);
+                    Point proj(segment.findPerPoint(point));
+                    val = Field::linear2DInt(listPts,listVal,proj);
+                }
+                if(listPts.size() == 2)
+                {
+                    Segment segment(listPts[0],listPts[1]);
+                    Point proj(segment.findPerPoint(point));
+                    val = Field::linear2DInt(listPts,listVal,proj);
+                }
+                if(listPts.size() == 1) val = listVal[0];
+            }
+            if( val[0] < 0. ) {/*cout<<val[0]<<endl;*/val[0] = 0.;}
+            return val;
         }
-        else return val;
+        else {
+            //cout<<"Point outside mesh in DistField::interpolate"<<endl;
+            return val;
+        }
     }
-    else return val;
+    else {
+        //cout<<"Point outside polygon in DistField::interpolate"<<endl;
+        return val;
+    }
 }

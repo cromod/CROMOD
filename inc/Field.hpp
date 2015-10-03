@@ -101,6 +101,24 @@ namespace Cromod {
                 static GeomAPI::Vector bilinearInt(std::vector<GeomAPI::Point> listPts, 
                                                    std::vector<GeomAPI::Vector> listVal,
                                                    GeomAPI::Point point);
+                /** @brief Function to make linear interpolation between 3 points
+                 *  @param listPts list of points
+                 *  @param listVal list of values
+                 *  @param point point to interpolate
+                 *  @return interpolated value
+                 */
+                static GeomAPI::Vector linear3DInt(std::vector<GeomAPI::Point> listPts, 
+                                                   std::vector<GeomAPI::Vector> listVal,
+                                                   GeomAPI::Point point) {};
+                /** @brief Function to make linear interpolation between 2 points
+                 *  @param listPts list of points
+                 *  @param listVal list of values
+                 *  @param point point to interpolate
+                 *  @return interpolated value
+                 */
+                static GeomAPI::Vector linear2DInt(std::vector<GeomAPI::Point> listPts, 
+                                                   std::vector<GeomAPI::Vector> listVal,
+                                                   GeomAPI::Point point) {};
                 /** @brief Function to renormalize vector
                  *  @param vec vector
                  *  @return renormalized vector
