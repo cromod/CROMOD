@@ -183,7 +183,7 @@ vector<Point> Polygon::getPoints()
 
 Point Polygon::getOutside()
 {  
-    double pt[] = {INFINITY,0.};
+    double pt[] = {GEOM_INFINITY,0.};
     Point point(pt,2);
     return point;
 }
@@ -302,5 +302,8 @@ bool Polygon::isInside(const Point& point_in)
         //cout << "Nb of intersection = " << this->getNbIntersect(segment) << endl;
         return true;
     }
-    else return false;
+    else {
+        //cout << "Nb of intersection = " << this->getNbIntersect(segment) << endl;
+        return false;
+    }
 }

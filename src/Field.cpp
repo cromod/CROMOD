@@ -8,6 +8,7 @@
 #include "Field.hpp"
 #include "Exception.hpp"
 #include <cmath>
+#include <iostream>
 
 using namespace Cromod::GeomAPI;
 using namespace Cromod::FieldAPI;
@@ -104,7 +105,7 @@ void Field::build(const Mesh &mesh, int dim)
         Exception::logWarning("Mesh argument of Field::build is not complete",__FILENAME__,__LINE__);
     mesh_ = mesh;
     int size = mesh_.size();
-    Vector inf(INFINITY,dim);
+    Vector inf(VAL_INFINITY,dim);
     vector<Vector> listValue(size,inf);
     listValue_ = listValue;
     computed_ = false;
@@ -126,12 +127,16 @@ Vector Field::bilinearInt(vector<Point> listPts, vector<Vector> listVal, Point p
           double y = (point[1]-listPts[0][1])/(listPts[2][1]-listPts[0][1]);
           Vector a00, a10, a01, a11, val;
           a00 = listVal[0];
+	  //cout << a00[0] << endl;
           a10 = listVal[1]; a10 -= listVal[0];
           a10 *= x;
+	  //cout << a10[0] << endl;
           a01 = listVal[3]; a01 -= listVal[0];
           a01 *= y;
+	  //cout << a01[0] << endl;
           a11 = listVal[2]; a11 -= listVal[0]; a11 -= listVal[3]; a11 += listVal[1];
           a11 *= x*y;
+	  //cout << a11[0] << endl;
 	  val = a00; val += a10; val += a01; val += a11;
           return val;
       }
