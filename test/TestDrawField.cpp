@@ -54,7 +54,7 @@ void mgls_prepare2d(mglData *a)
         y = 200.*(static_cast<double>(2*j)/static_cast<double>(m)-1.);
         i0 = i+n*j;
         double dist = distfield.interpolate(x,y)[0];
-        if(dist < INFINITY) a->a[i0] = dist;
+        if(dist < VAL_INFINITY) a->a[i0] = dist;
         else a->a[i0] = 0.;
     }
 }
