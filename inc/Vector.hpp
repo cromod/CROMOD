@@ -49,6 +49,21 @@ namespace Cromod {
                  */
                 bool operator!=(const Vector& vec) const;
         };
+
+        /** @brief Function to compute cross product
+         *  @param vec1 vector 1
+         *  @param vec2 vector 2
+         *  @return vector
+         */
+        Vector crossProd(const Vector& vec1, const Vector& vec2);
+
+        /** @brief Function to compute dot product
+         *  @param vec1 vector 1
+         *  @param vec2 vector 2
+         *  @return dot product
+         */
+        double dotProd(const Vector& vec1, const Vector& vec2);
+	
         /** @typedef Point */
         typedef Vector Point;
     }

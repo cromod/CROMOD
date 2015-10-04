@@ -189,8 +189,7 @@ Point Segment::findPerPoint(const Point &pointC) const
     Vector vAB = AB.getVector();
     Vector vAC = AC.getVector();
     double nAB = AB.getLength(); // norme du vecteur AB
-    double dot_prod = (vAB*vAC).sum(); // produit scalaire AB.AC
-    double coef = dot_prod/pow(nAB,2);
+    double coef = dotProd(vAB,vAC)/pow(nAB,2);
     Vector vAH(coef*vAB);
     Point pointH(vAH+pointA);
     return pointH;
