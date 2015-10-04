@@ -120,28 +120,56 @@ double Field::computeRelErr(double val1, double val2)
 
 Vector Field::bilinearInt(vector<Point> listPts, vector<Vector> listVal, Point point)
 {
+      if(listPts.size()!=4 && listVal.size()!=4)
+          throw(Exception("Need 4 points and 4 values to use Field::Bilinear"
+                                   ,__FILENAME__,__LINE__)) ;
       Polygon pol(listPts);
       if( pol.isInside(point) )
       {
           double x = (point[0]-listPts[0][0])/(listPts[1][0]-listPts[0][0]);
           double y = (point[1]-listPts[0][1])/(listPts[2][1]-listPts[0][1]);
-          Vector a00, a10, a01, a11, val;
-          a00 = listVal[0];
-	  //cout << a00[0] << endl;
-          a10 = listVal[1]; a10 -= listVal[0];
-          a10 *= x;
-	  //cout << a10[0] << endl;
-          a01 = listVal[3]; a01 -= listVal[0];
-          a01 *= y;
-	  //cout << a01[0] << endl;
-          a11 = listVal[2]; a11 -= listVal[0]; a11 -= listVal[3]; a11 += listVal[1];
-          a11 *= x*y;
-	  //cout << a11[0] << endl;
-	  val = a00; val += a10; val += a01; val += a11;
+          Vector a00(listVal[0]);
+          //cout << a00[0] << endl;
+          Vector a10(listVal[1]-listVal[0]);
+          //cout << a10[0] << endl;
+          Vector a01(listVal[3]-listVal[0]);
+          //cout << a01[0] << endl;
+          Vector a11(listVal[2]-listVal[0]-listVal[3]+listVal[1]);
+          //cout << a11[0] << endl;
+          Vector val(a00+a10*x+a01*y+a11*x*y);
           return val;
       }
       else throw(Exception("Impossible to use Field::BilinearInt (point outside area)"
                                    ,__FILENAME__,__LINE__)) ;
+}
+
+Vector Field::linear3DInt(vector<Point> listPts, vector<Vector> listVal, Point point)
+{
+    if(listPts.size()!=3 && listVal.size()!=3)
+        throw(Exception("Need 3 points and 3 values to use Field::linear3DInt"
+                                   ,__FILENAME__,__LINE__)) ;
+
+    double x1(listPts[0][0]),y1(listPts[0][1]);
+    Vector z1(listVal[0]);
+    double x2(listPts[1][0]),y2(listPts[1][1]);
+    Vector z2(listVal[1]);
+    double x3(listPts[2][0]),y3(listPts[2][1]);
+    Vector z3(listVal[2]);
+    
+    Vector nx((y2-y1)*(z3-z1)-(z2-z1)*(y3-y1));
+    Vector ny((z2-z1)*(x3-x1)-(x2-x1)*(z3-z1));
+    double nz((x2-x1)*(y3-y1)-(y2-y1)*(x3-x1));
+    if(abs(nz)<GEOM_TOLERANCE)
+        throw(Exception("Colinear points in Field::linear3DInt",__FILENAME__,__LINE__)) ;
+
+    Vector val(z1-(point[0]-x1)/nz*nx-(point[1]-y1)/nz*ny);
+    return val;
+}
+
+Vector Field::linear2DInt(vector<Point> listPts, vector<Vector> listVal, Point point)
+{
+    Vector vec;
+    return vec;
 }
 
 Vector Field::renorm(Vector vec)
