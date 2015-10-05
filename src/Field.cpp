@@ -111,14 +111,24 @@ void Field::build(const Mesh &mesh, int dim)
     computed_ = false;
 }
 
-double Field::computeRelErr(double val1, double val2)
+double Cromod::FieldAPI::computeRelErr(double val1, double val2)
 {
     if(val1!=0.) return abs(1.-val2/val1);
     else if(val2!=0.) return abs(1.-val1/val2);
     else return 0.;
 }
 
-Vector Field::bilinearInt(vector<Point> listPts, vector<Vector> listVal, Point point)
+Vector Cromod::FieldAPI::renorm(Vector vec)
+{
+    double norm = 0.;
+    for(unsigned int i=0; i<vec.size(); i++) norm += pow(vec[i],2.);
+    norm = sqrt(norm);
+    if( norm > VAL_TOLERANCE ) vec /= norm;
+    else vec *= 0.;
+    return vec;
+}
+
+Vector Cromod::FieldAPI::bilinearInt(vector<Point> listPts, vector<Vector> listVal, Point point)
 {
       if(listPts.size()!=4 && listVal.size()!=4)
           throw(Exception("Need 4 points and 4 values to use Field::Bilinear"
@@ -134,7 +144,7 @@ Vector Field::bilinearInt(vector<Point> listPts, vector<Vector> listVal, Point p
           //cout << a10[0] << endl;
           Vector a01(listVal[3]-listVal[0]);
           //cout << a01[0] << endl;
-          Vector a11(listVal[2]-listVal[0]-listVal[3]+listVal[1]);
+          Vector a11(listVal[2]+listVal[0]-listVal[3]-listVal[1]);
           //cout << a11[0] << endl;
           Vector val(a00+a10*x+a01*y+a11*x*y);
           return val;
@@ -143,7 +153,7 @@ Vector Field::bilinearInt(vector<Point> listPts, vector<Vector> listVal, Point p
                                    ,__FILENAME__,__LINE__)) ;
 }
 
-Vector Field::linear3DInt(vector<Point> listPts, vector<Vector> listVal, Point point)
+Vector Cromod::FieldAPI::linearInt3Pts(vector<Point> listPts, vector<Vector> listVal, Point point)
 {
     if(listPts.size()!=3 && listVal.size()!=3)
         throw(Exception("Need 3 points and 3 values to use Field::linear3DInt"
@@ -160,24 +170,25 @@ Vector Field::linear3DInt(vector<Point> listPts, vector<Vector> listVal, Point p
     Vector ny((z2-z1)*(x3-x1)-(x2-x1)*(z3-z1));
     double nz((x2-x1)*(y3-y1)-(y2-y1)*(x3-x1));
     if(abs(nz)<GEOM_TOLERANCE)
-        throw(Exception("Colinear points in Field::linear3DInt",__FILENAME__,__LINE__)) ;
+        throw(Exception("3 colinear points in Field::linear3DInt",__FILENAME__,__LINE__)) ;
 
     Vector val(z1-(point[0]-x1)/nz*nx-(point[1]-y1)/nz*ny);
     return val;
 }
 
-Vector Field::linear2DInt(vector<Point> listPts, vector<Vector> listVal, Point point)
+Vector Cromod::FieldAPI::linearInt2Pts(vector<Point> listPts, vector<Vector> listVal, Point point)
 {
-    Vector vec;
-    return vec;
-}
+    if(listPts.size()!=2 && listVal.size()!=2)
+        throw(Exception("Need 2 points and 2 values to use Field::linear2DInt"
+                                   ,__FILENAME__,__LINE__)) ;
 
-Vector Field::renorm(Vector vec)
-{
-    double norm = 0.;
-    for(unsigned int i=0; i<vec.size(); i++) norm += pow(vec[i],2.);
-    norm = sqrt(norm);
-    if( norm > VAL_TOLERANCE ) vec /= norm;
-    else vec *= 0.;
-    return vec;
+    Vector valA(listVal[0]);
+    Vector valB(listVal[1]);
+    Segment AB(listPts[0],listPts[1]);
+    double lAB = AB.getLength();
+    Segment AM(listPts[0],point);
+    double lAM = AM.getLength();    
+
+    Vector val(valA*(1.-lAM/lAB)+valB*lAM/lAB);
+    return val;
 }

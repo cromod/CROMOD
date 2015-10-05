@@ -85,46 +85,6 @@ namespace Cromod {
                  */
                 virtual GeomAPI::Vector interpolate(double x, double y) = 0;
 
-                /** @brief Function to compute relative error
-                 *  @param val1 first value
-                 *  @param val2 second value
-                 *  @return relative error
-                 */
-                static double computeRelErr(double val1, double val2);
-                /** @brief Function to make bilinear interpolation between 4 points
-                 *  @details http://en.wikipedia.org/wiki/Bilinear_interpolation
-                 *  @param listPts list of points
-                 *  @param listVal list of values
-                 *  @param point point to interpolate
-                 *  @return interpolated value
-                 */
-                static GeomAPI::Vector bilinearInt(std::vector<GeomAPI::Point> listPts, 
-                                                   std::vector<GeomAPI::Vector> listVal,
-                                                   GeomAPI::Point point);
-                /** @brief Function to make linear interpolation between 3 points
-                 *  @param listPts list of points
-                 *  @param listVal list of values
-                 *  @param point point to interpolate
-                 *  @return interpolated value
-                 */
-                static GeomAPI::Vector linear3DInt(std::vector<GeomAPI::Point> listPts, 
-                                                   std::vector<GeomAPI::Vector> listVal,
-                                                   GeomAPI::Point point);
-                /** @brief Function to make linear interpolation between 2 points
-                 *  @param listPts list of points
-                 *  @param listVal list of values
-                 *  @param point point to interpolate
-                 *  @return interpolated value
-                 */
-                static GeomAPI::Vector linear2DInt(std::vector<GeomAPI::Point> listPts, 
-                                                   std::vector<GeomAPI::Vector> listVal,
-                                                   GeomAPI::Point point);
-                /** @brief Function to renormalize vector
-                 *  @param vec vector
-                 *  @return renormalized vector
-                 */
-                static GeomAPI::Vector renorm(GeomAPI::Vector vec);
-
             protected:
                 
                 /** @brief Mesh attribute */  
@@ -134,6 +94,46 @@ namespace Cromod {
                 /** @brief computed field */  
                 bool computed_;
         };
+
+        /** @brief Function to compute relative error
+         *  @param val1 first value
+         *  @param val2 second value
+         *  @return relative error
+         */
+        double computeRelErr(double val1, double val2);
+        /** @brief Function to renormalize vector
+         *  @param vec vector
+         *  @return renormalized vector
+         */
+        GeomAPI::Vector renorm(GeomAPI::Vector vec);
+        /** @brief Function to make bilinear interpolation between 4 points
+         *  @details http://en.wikipedia.org/wiki/Bilinear_interpolation
+         *  @param listPts list of points
+         *  @param listVal list of values
+         *  @param point point to interpolate
+         *  @return interpolated value
+         */
+        GeomAPI::Vector bilinearInt(std::vector<GeomAPI::Point> listPts, 
+                                    std::vector<GeomAPI::Vector> listVal,
+                                    GeomAPI::Point point);
+        /** @brief Function to make linear interpolation between 3 points
+         *  @param listPts list of points
+         *  @param listVal list of values
+         *  @param point point to interpolate
+         *  @return interpolated value
+         */
+        GeomAPI::Vector linearInt3Pts(std::vector<GeomAPI::Point> listPts, 
+                                      std::vector<GeomAPI::Vector> listVal,
+                                      GeomAPI::Point point);
+        /** @brief Function to make linear interpolation between 2 points
+         *  @param listPts list of points
+         *  @param listVal list of values
+         *  @param point point to interpolate
+         *  @return interpolated value
+         */
+        GeomAPI::Vector linearInt2Pts(std::vector<GeomAPI::Point> listPts, 
+                                      std::vector<GeomAPI::Vector> listVal,
+                                      GeomAPI::Point point);
     }
 }
 

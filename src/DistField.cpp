@@ -170,7 +170,7 @@ void DistField::compute()
              min_val = *min_element(listVal.begin(),listVal.end());
              for(unsigned int i=0; i<listVal.size(); i++)
              {
-                 if( Field::computeRelErr(listVal[i],min_val) < VAL_TOLERANCE )
+                 if( computeRelErr(listVal[i],min_val) < VAL_TOLERANCE )
                  {  
                      int index = listNode[i];
                      this->setStatus(index,FROZEN);
@@ -210,70 +210,68 @@ Vector DistField::interpolate(double x, double y)
 
     if(polygon.isInside(point))
     {
-        Segment seg(point,mesh_[index].getPosition());
-        if( seg.getLength() < step*sqrt(2.) )
-        {
-            vector<Point> listPts;
-            vector<Vector> listVal;
-            if(polygon.isInside(mesh_[index].getPosition()))
-            {
-                listPts.push_back(mesh_[index].getPosition());
-                listVal.push_back((*this)[index]);
-            }
-            if(polygon.isInside(mesh_[index+1].getPosition()))
-            {
-                listPts.push_back(mesh_[index+1].getPosition());
-                listVal.push_back((*this)[index+1]);
-            }
-            if(polygon.isInside(mesh_[index+1+nx].getPosition()))
-            {
-                listPts.push_back(mesh_[index+1+nx].getPosition());
-                listVal.push_back((*this)[index+1+nx]);
-            }
-            if(polygon.isInside(mesh_[index+nx].getPosition()))
-            {
-                listPts.push_back(mesh_[index+nx].getPosition());
-                listVal.push_back((*this)[index+nx]);
-            }
+        vector<Point> listPts;
+        vector<Vector> listVal;
 
-            Polygon element(listPts);
-            if(listPts.size() == 4 && element.isInside(point)) val = Field::bilinearInt(listPts,listVal,point);
-            else if(listPts.size() == 3 && element.isInside(point)) val = Field::linear3DInt(listPts,listVal,point);
-            else
+        if(polygon.isInside(mesh_[index].getPosition()))
+        {
+            listPts.push_back(mesh_[index].getPosition());
+            listVal.push_back((*this)[index]);
+        }
+        if(polygon.isInside(mesh_[index+1].getPosition()))
+        {
+            listPts.push_back(mesh_[index+1].getPosition());
+            listVal.push_back((*this)[index+1]);
+        }
+        if(polygon.isInside(mesh_[index+1+nx].getPosition()))
+        {
+            listPts.push_back(mesh_[index+1+nx].getPosition());
+            listVal.push_back((*this)[index+1+nx]);
+        }
+        if(polygon.isInside(mesh_[index+nx].getPosition()))
+        {
+            listPts.push_back(mesh_[index+nx].getPosition());
+            listVal.push_back((*this)[index+nx]);
+        }
+
+        Polygon element(listPts);
+
+        if(listPts.size() == 4 && element.isInside(point)) val = bilinearInt(listPts,listVal,point);
+        else if(listPts.size() == 4 && !element.isInside(point))
+        {
+            Segment seg(listPts[0],point);
+            if(seg.getLength()<GEOM_TOLERANCE) val = listVal[0];
+        }
+        else if(listPts.size() == 3 && element.isInside(point)) val = linearInt3Pts(listPts,listVal,point);
+        else if(listPts.size() == 3 && !element.isInside(point))
+        {
+            vector<Segment> listSeg = element.getList();
+            int it(0);
+            Segment segment;
+            for(int i=0; i<3; i++) 
             {
-                if(listPts.size() == 3)
+                if(computeRelErr(listSeg[i].getLength(),step*sqrt(2.))<GEOM_TOLERANCE)
                 {
-                    vector<Segment> listSeg = element.getList();
-                    int it(0);
-                    Segment segment;
-                    for(int i=0; i<3; i++) 
-                    {
-                        if(abs(listSeg[i].getLength()-step*sqrt(2.))<GEOM_TOLERANCE)
-                        {
-                            it = (i+2)%3;
-                            segment = listSeg[i];
-                        }
-                    }
-                    listPts.erase(listPts.begin()+it);
-                    listVal.erase(listVal.begin()+it);
-                    Point proj(segment.findPerPoint(point));
-                    val = Field::linear2DInt(listPts,listVal,proj);
+                    it = (i+2)%3;
+                    segment = listSeg[i];
                 }
-                if(listPts.size() == 2)
-                {
-                    Segment segment(listPts[0],listPts[1]);
-                    Point proj(segment.findPerPoint(point));
-                    val = Field::linear2DInt(listPts,listVal,proj);
-                }
-                if(listPts.size() == 1) val = listVal[0];
             }
-            if( val[0] < 0. ) {/*cout<<val[0]<<endl;*/val[0] = 0.;}
-            return val;
+            listPts.erase(listPts.begin()+it);
+            listVal.erase(listVal.begin()+it);
+            Point proj(segment.findPerPoint(point));
+            val = linearInt2Pts(listPts,listVal,proj);
         }
-        else {
-            //cout<<"Point outside mesh in DistField::interpolate"<<endl;
-            return val;
+        else if(listPts.size() == 2)
+        {
+            Segment segment(listPts[0],listPts[1]);
+            Point proj(segment.findPerPoint(point));
+            val = linearInt2Pts(listPts,listVal,proj);
         }
+        else if(listPts.size() == 1) val = listVal[0];
+        else throw(Exception("Impossible to use DistField::interpolate",__FILENAME__,__LINE__)) ;
+
+        if( val[0] < 0. ) val[0] = 0.;
+        return val;
     }
     else {
         //cout<<"Point outside polygon in DistField::interpolate"<<endl;

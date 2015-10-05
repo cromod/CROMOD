@@ -55,7 +55,7 @@ void mgls_prepare2d(mglData *a)
         i0 = i+n*j;
         double dist = distfield.interpolate(x,y)[0];
         if(dist < VAL_INFINITY) a->a[i0] = dist;
-        else a->a[i0] = 0.;
+        else a->a[i0] = -10.;
     }
 }
 
@@ -64,11 +64,9 @@ int draw(mglGraph *gr)
     mglData a(200,200,1);  mgls_prepare2d(&a);
     gr->SetRanges(-200,200,-200,200,0,500);
     
-    gr->SubPlot(1,1,0);  gr->Title("Density");
-    gr->Box();  gr->Dens(a);
+    gr->Title("Density"); gr->Box();  gr->Dens(a);
 
-    //gr->SubPlot(1,1,0); gr->Title("Surf plot (default)");
-    //gr->Light(true);  gr->Rotate(50,60);  gr->Box();  gr->Surf(a);
+    //gr->Title("Surface plot"); gr->Light(true); gr->Rotate(50,60); gr->Box(); gr->Surf(a);
     
     return 0;
 }

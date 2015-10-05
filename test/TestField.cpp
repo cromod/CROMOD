@@ -76,7 +76,7 @@ BOOST_AUTO_TEST_CASE( MethodTests )
     double dist = distfield.interpolate(0.,0.)[0];
     cout << "  interpolated distance = " << dist << endl;
     cout << "  real distance = " << seg.getLength() << endl;
-    BOOST_REQUIRE_MESSAGE(Field::computeRelErr(dist,seg.getLength())<1.e-2,"Bad value of DistField::interpolate");
+    BOOST_REQUIRE_MESSAGE(computeRelErr(dist,seg.getLength())<1.e-2,"Bad value of DistField::interpolate");
     
     cout << "- Test of GradField constructor" << endl;
     clock.restart();
@@ -89,6 +89,6 @@ BOOST_AUTO_TEST_CASE( MethodTests )
     cout << "  interpolated gradient = " << vec[0] << " , " << vec[1] << endl;
     double norm = sqrt(pow(vec[0],2.)+pow(vec[1],2.));
     cout << "  norm = " << norm << endl;
-    BOOST_REQUIRE_MESSAGE(Field::computeRelErr(norm,1.)<VAL_TOLERANCE,"Bad value of GradField::interpolate");
+    BOOST_REQUIRE_MESSAGE(computeRelErr(norm,1.)<VAL_TOLERANCE,"Bad value of GradField::interpolate");
 
 }

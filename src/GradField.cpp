@@ -129,8 +129,8 @@ Vector GradField::interpolate(double x, double y)
                 listVal.push_back((*this)[index+1]); 
                 listVal.push_back((*this)[index+1+nx]); 
                 listVal.push_back((*this)[index+nx]); 
-                val = Field::bilinearInt(listPts,listVal,point);
-                val = Field::renorm(val);
+                val = bilinearInt(listPts,listVal,point);
+                val = renorm(val);
                 return val;
             }
             else return val;
