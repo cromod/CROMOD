@@ -96,46 +96,5 @@ void GradField::compute(const vector<Vector>& listValue)
 
 Vector GradField::interpolate(double x, double y)
 {
-    if (!this->isComputed())
-        throw(Exception("Impossible to use DistField::interpolate",__FILENAME__,__LINE__)) ;
-
-    double step = this->getStep();
-    double pt[] = {x,y};
-    Point point(pt,2);
-    Polygon polygon(mesh_.getPolygon());
-    map<Bottom,double> coord(polygon.getBottom());
-
-    int nx = mesh_.getDim()[0];
-    int index = static_cast<int>((x-coord[XMIN])/step+1.)
-                  + static_cast<int>((y-coord[YMIN])/step+1.)*nx;
-
-    Vector val(0.,2);
-
-    if(polygon.isInside(point))
-    {
-        Segment seg(point,mesh_[index].getPosition());
-        if( seg.getLength() < step*sqrt(2.) )
-        {
-            vector<Point> listPts;
-            listPts.push_back(mesh_[index].getPosition());
-            listPts.push_back(mesh_[index+1].getPosition());
-            listPts.push_back(mesh_[index+1+nx].getPosition());
-            listPts.push_back(mesh_[index+nx].getPosition());
-            Polygon square(listPts);
-            if(square.isInside(point))
-            {
-                vector<Vector> listVal;  
-                listVal.push_back((*this)[index]); 
-                listVal.push_back((*this)[index+1]); 
-                listVal.push_back((*this)[index+1+nx]); 
-                listVal.push_back((*this)[index+nx]); 
-                val = bilinearInt(listPts,listVal,point);
-                val = renorm(val);
-                return val;
-            }
-            else return val;
-        }
-        else return val;
-    }
-    else return val;
+    return this->Field::interpolate(x,y,2,0.);
 }

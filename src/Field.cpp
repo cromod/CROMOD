@@ -111,6 +111,95 @@ void Field::build(const Mesh &mesh, int dim)
     computed_ = false;
 }
 
+Vector Field::interpolate(double x, double y, int dim, double value)
+{
+    if (!this->isComputed())
+        throw(Exception("Impossible to use DistField::interpolate",__FILENAME__,__LINE__)) ;
+
+    double step = this->getStep();
+    double pt[] = {x,y};
+    Point point(pt,2);
+    Polygon polygon(mesh_.getPolygon());
+    map<Bottom,double> coord(polygon.getBottom());
+
+    int nx = mesh_.getDim()[0];
+    int index = static_cast<int>((x-coord[XMIN])/step+1.)
+                  + static_cast<int>((y-coord[YMIN])/step+1.)*nx;
+
+    Vector val(value,dim);
+
+    if(polygon.isInside(point))
+    {
+        vector<Point> listPts;
+        vector<Vector> listVal;
+
+        if(polygon.isInside(mesh_[index].getPosition()))
+        {
+            listPts.push_back(mesh_[index].getPosition());
+            listVal.push_back((*this)[index]);
+        }
+        if(polygon.isInside(mesh_[index+1].getPosition()))
+        {
+            listPts.push_back(mesh_[index+1].getPosition());
+            listVal.push_back((*this)[index+1]);
+        }
+        if(polygon.isInside(mesh_[index+1+nx].getPosition()))
+        {
+            listPts.push_back(mesh_[index+1+nx].getPosition());
+            listVal.push_back((*this)[index+1+nx]);
+        }
+        if(polygon.isInside(mesh_[index+nx].getPosition()))
+        {
+            listPts.push_back(mesh_[index+nx].getPosition());
+            listVal.push_back((*this)[index+nx]);
+        }
+
+        Polygon element(listPts);
+
+        if(listPts.size() == 4 && element.isInside(point)) val = bilinearInt(listPts,listVal,point);
+        else if(listPts.size() == 4 && !element.isInside(point))
+        {
+            Segment seg(listPts[0],point);
+            if(seg.getLength()<GEOM_TOLERANCE) val = listVal[0];
+        }
+        else if(listPts.size() == 3 && element.isInside(point)) val = linearInt3Pts(listPts,listVal,point);
+        else if(listPts.size() == 3 && !element.isInside(point))
+        {
+            vector<Segment> listSeg = element.getList();
+            int it(0);
+            Segment segment;
+            for(int i=0; i<3; i++) 
+            {
+                if(computeRelErr(listSeg[i].getLength(),step*sqrt(2.))<GEOM_TOLERANCE)
+                {
+                    it = (i+2)%3;
+                    segment = listSeg[i];
+                }
+            }
+            listPts.erase(listPts.begin()+it);
+            listVal.erase(listVal.begin()+it);
+            Point proj(segment.findPerPoint(point));
+            val = linearInt2Pts(listPts,listVal,proj);
+        }
+        else if(listPts.size() == 2)
+        {
+            Segment segment(listPts[0],listPts[1]);
+            Point proj(segment.findPerPoint(point));
+            val = linearInt2Pts(listPts,listVal,proj);
+        }
+        else if(listPts.size() == 1) val = listVal[0];
+        else throw(Exception("Impossible to use DistField::interpolate",__FILENAME__,__LINE__)) ;
+
+        if( val.max() < 0. ) throw(Exception("Negative value in DistField::interpolate",__FILENAME__,__LINE__)) ;
+
+        return val;
+    }
+    else {
+        //cout<<"Point outside polygon in DistField::interpolate"<<endl;
+        return val;
+    }
+}
+
 double Cromod::FieldAPI::computeRelErr(double val1, double val2)
 {
     if(val1!=0.) return abs(1.-val2/val1);

@@ -83,7 +83,7 @@ namespace Cromod {
                  *  @param y y coordinate
                  *  @return value at (x,y)
                  */
-                virtual GeomAPI::Vector interpolate(double x, double y) = 0;
+                virtual GeomAPI::Vector interpolate(double x, double y, int dim, double value);
 
             protected:
                 
